@@ -8,7 +8,7 @@ class Part:
         self.index = index
         self.parts = parts
 
-        def DLS(self, parts, obstacles, borders, gridSize, goal, depth):
+    def DLS(self, parts, obstacles, borders, gridSize, goal, depth):
         if depth == 0 and len(self.parts) == goal:
             return self
         elif depth > 0:
