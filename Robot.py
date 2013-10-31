@@ -1,6 +1,5 @@
 from Queue import *
 import copy
-#import Grid
 
 class Part:
     """docstring for part"""
@@ -8,43 +7,6 @@ class Part:
         self.index = index
         self.parts = parts
 
-    def DLS(self, parts, obstacles, borders, gridSize, goal, depth):
-        if depth == 0 and len(self.parts) == goal:
-            return self
-        elif depth > 0:
-            for child in self.expand(parts, obstacles, borders, gridSize):
-                child.DLS(parts, obstacles, borders, gridSize, goal, depth-1)
-        else:
-            return None
-
-    def IDFS(self,obstacles, parts, borders, gridSize):
-        depth = 1
-        goal = len(parts)
-        while True:
-            result = self.DLS(parts, obstacles, borders, gridSize, goal, depth)
-            try:
-                if len(result) == goal:
-                    return True
-                depth+=1
-            except Exception, e:
-                return False
-            
-    
-    def expand(self, parts, obstacles, borders, gridSize):
-        children = []
-        tmp_node = copy.deepcopy(self)
-        tmp_node1 = copy.deepcopy(self)
-        tmp_node2 = copy.deepcopy(self)
-        tmp_node3 = copy.deepcopy(self)
-        if tmp_node.Move("North",obstacles,parts,borders,gridSize) == True:
-            children.append(tmp_node)
-        if tmp_node1.Move("South",obstacles,parts,borders,gridSize) == True:
-            children.append(tmp_node1)
-        if tmp_node2.Move("East",obstacles,parts,borders,gridSize) == True:
-            children.append(tmp_node2)
-        if tmp_node3.Move("West",obstacles,parts,borders,gridSize) == True:
-            children.append(tmp_node3)
-        return children
 
     def depthFirstSearch(self, obstacles, parts, borders, gridSize,result_list,directions,flag):
 
@@ -121,8 +83,10 @@ class Part:
             temp_self_list = self.parts[:]
             
             print "~~~~~~~~~~~~~~~" 
+            mt = 0
             while (True):
 
+                mt += 1
                 flag = 0
                 counter_position = 0
                 tempPosition = 0
@@ -163,7 +127,7 @@ class Part:
 
                     if tempPosition in obstacles:
                             flag -= 1
-                            
+                            flag1 = True
                             if direction == "North":
                                     new_part_position = [(tempPosition + gridSize)]
                                     
@@ -178,14 +142,14 @@ class Part:
                             for old_position in temp_self_list:
                                 
                                 differenace = old_position - temp_self_list[counter_position]
-                                if abs(differenace) != 1 or abs(differenace) != gridSize:
-                                    flag = True
-                                else:
-                                    flag = False 
+                                t = abs(differenace)
+
                                 if differenace != 0:    
                                     new_part_position.append(new_part_position[0] + differenace)
+                                elif mt == 1:
+                                    flag1 = False    
                             self.parts = new_part_position
-                            return flag      
+                            return flag1      
 
 
 
@@ -232,7 +196,7 @@ class Part:
 
                     temp_self.parts [counter_position] = tempPosition
                     counter_position += 1
-
+ 
 gridSize = 4
 part2 = Part(1,[9])
 part3 = Part(2,[10])
@@ -241,15 +205,8 @@ part5 = Part(4,[12])
 myList = [part2,part3,part4,part5]
 
 print part2.Move("East",[1,7,15],myList,[1,4,5,8,9,12,13,16],4)
-print 'hello'
-#print part2.IDFS([1,7,15],myList,[1,4,5,8,9,12,13,16],4)
-#print part2.depthFirstSearch([1,7,15],myList,[1,4,5,8,9,12,13,16],4,0,[],["North","South","East","West"])
-"""
 
-part2.Move('East', [7,1],myList , [1,4,5,8,9,12,13,16], 4)
-print "##########"
-print len(myList[0].parts)
-print myList[0].parts[0]
-print myList[0].parts[1]
-print myList[0].parts[2]
-print myList[0].parts[3]"""
+
+
+
+
