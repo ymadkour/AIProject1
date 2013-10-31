@@ -1,6 +1,6 @@
 from Queue import *
 import copy
-import Grid
+#import Grid
 
 class Part:
     """docstring for part"""
