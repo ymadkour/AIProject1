@@ -182,7 +182,15 @@ class Part:
              return _resutl_list
    
 
-   
+   def _eq_ (self, other):
+         if self.index == other.index:
+             if self.parts == other.parts:
+                 return True
+         else:
+              return False   
+         
+
+    
 
     def Move(self, direction, obstacles, parts, borders, gridSize):
         
