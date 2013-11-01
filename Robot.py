@@ -7,6 +7,99 @@ class Part:
         self.index = index
         self.parts = parts
 
+    def _eq_ (self, other):
+        if self.index == other.index:
+            if self.parts == other.parts:
+                return True
+        else:
+            return False
+        
+
+    def IDFS(self,obstacles, parts, borders, gridSize):
+        depth = 0
+        goal = len(parts)
+        while True:
+            result = self.DLS(parts, obstacles, borders, gridSize, goal, depth)
+            if result == True:
+                return True
+            try:
+                if result is None:
+                    depth += 1
+                elif len(result) == goal:
+                    return True
+                else:
+                    depth+=1
+            except Exception, e:
+                pass
+#                 return False
+            
+    def DLS(self, parts, obstacles, borders, gridSize, goal, depth):
+        if depth == 0 and len(self.parts) == goal:
+            return self
+        if len(self.parts) == goal:
+            return True
+        elif depth > 0:
+            for child in self.expand(parts, obstacles, borders, gridSize): #All directions fail case
+                #try:
+                child[0].DLS(child[1], obstacles, borders, gridSize, goal, depth-1)
+#                 except Exception, e:
+#                     print e
+                
+#         else:
+#             return None    
+    
+    def expand(self, parts, obstacles, borders, gridSize):
+        children = []
+        originalList1 = copy.deepcopy(parts)
+        originalList2 = copy.deepcopy(parts)
+        originalList3 = copy.deepcopy(parts)
+        originalList4 = copy.deepcopy(parts)
+        tmp_node1 = copy.deepcopy(self)
+        tmp_node2 = copy.deepcopy(self)
+        tmp_node3 = copy.deepcopy(self)
+        tmp_node4 = copy.deepcopy(self)
+        
+        if tmp_node1.Move("North",obstacles,originalList1,borders,gridSize) == True:
+            tmpList = copy.deepcopy(originalList1)
+            for p in parts: #Removing from the original List warning
+                for item in tmpList:
+                    if item._eq_(p) == True:
+                        tmpList.remove(item)
+            originalList1.reverse()
+            child_and_parts = [tmpList[0], originalList1]
+            children.append(child_and_parts)
+            
+        if tmp_node2.Move("South",obstacles,originalList2,borders,gridSize) == True:
+            tmpList = copy.deepcopy(originalList2)
+            for p in parts:
+                for item in tmpList:
+                    if item._eq_(p) == True:
+                        tmpList.remove(item)
+            originalList2.reverse()
+            child_and_parts = [tmpList[0], originalList2]
+            children.append(child_and_parts)
+        
+        if tmp_node3.Move("East",obstacles,originalList3,borders,gridSize) == True:
+            tmpList = copy.deepcopy(originalList3)
+            for p in parts:
+                for item in tmpList:
+                    if item._eq_(p) == True:
+                        tmpList.remove(item)
+            originalList3.reverse()
+            child_and_parts = [tmpList[0], originalList3]
+            children.append(child_and_parts)
+            
+        if tmp_node4.Move("West",obstacles,originalList4,borders,gridSize) == True:
+            tmpList = copy.deepcopy(originalList4)
+            for p in parts:
+                for item in tmpList:
+                    if item._eq_(p) == True:
+                        tmpList.remove(item)
+            originalList4.reverse()
+            child_and_parts = [tmpList[0], originalList4]
+            children.append(child_and_parts)
+        
+        return children
 
     def depthFirstSearch(self, obstacles, parts, borders, gridSize,result_list,directions,flag):
 
@@ -148,7 +241,9 @@ class Part:
                                     new_part_position.append(new_part_position[0] + differenace)
                                 elif mt == 1:
                                     flag1 = False    
-                            self.parts = new_part_position
+                            for p in parts:
+                                if self._eq_(p) == True:
+                                    p.parts = new_part_position
                             return flag1      
 
 
@@ -184,8 +279,10 @@ class Part:
                             new_part_position += part.parts
                             
                             parts.append(Part(self.index, new_part_position))
-                            if self in parts:
-                                parts.remove(self)
+                            for p in parts:
+                                if self._eq_(p) == True:
+                                    parts.remove(p)
+
                             parts.remove(part)
                             return True
                         
@@ -204,9 +301,13 @@ part4 = Part(3,[8])
 part5 = Part(4,[12])
 myList = [part2,part3,part4,part5]
 
-print part2.Move("East",[1,7,15],myList,[1,4,5,8,9,12,13,16],4)
+#print part2.Move("East",[1,7,15],myList,[1,4,5,8,9,12,13,16],4)
+# print 'hello'
 
+#print part2.IDFS([1,7,15],myList,[1,4,5,8,9,12,13,16],4) , "Final Result"
 
-
+# print part2.DLS(myList, [1,7,15], [1,4,5,8,9,12,13,16], 4, 4, 3)
+print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8]),Part(3,[12])],[1,4,5,8,9,12,13,16],4)
+#print part2.depthFirstSearch([1,7,15],myList,[1,4,5,8,9,12,13,16],4,0,[],["North","South","East","West"])
 
 
