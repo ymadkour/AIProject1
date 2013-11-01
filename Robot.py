@@ -17,7 +17,7 @@ class Part:
 
     def IDFS(self,obstacles, parts, borders, gridSize):
         depth = 0
-        goal = len(parts)
+        goal = len(parts)            
         while True:
             result = self.DLS(parts, obstacles, borders, gridSize, goal, depth)
             if result == True:
@@ -41,7 +41,8 @@ class Part:
         elif depth > 0:
             for child in self.expand(parts, obstacles, borders, gridSize): #All directions fail case
                 #try:
-                child[0].DLS(child[1], obstacles, borders, gridSize, goal, depth-1)
+                if(len(child) !=0 ):
+                    child[0].DLS(child[1], obstacles, borders, gridSize, goal, depth-1)
 #                 except Exception, e:
 #                     print e
                 
@@ -327,8 +328,8 @@ myList = [part2,part3,part4,part5]
 
 #print part2.IDFS([1,7,15],myList,[1,4,5,8,9,12,13,16],4) , "Final Result"
 
-# print part2.DLS(myList, [1,7,15], [1,4,5,8,9,12,13,16], 4, 4, 3)
-print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8]),Part(3,[12])],[1,4,5,8,9,12,13,16],4)
+#print part2.DLS(myList, [1,7,15], [1,4,5,8,9,12,13,16], 4, 4, 3)
+print Part(1,[9,10]).Move("East",[1,7,15],[Part(2,[9]),Part(1,[8,12,11])],[1,4,5,8,9,12,13,16],4)
 #print part2.depthFirstSearch([1,7,15],myList,[1,4,5,8,9,12,13,16],4,0,[],["North","South","East","West"])
 
 

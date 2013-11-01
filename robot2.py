@@ -18,7 +18,6 @@ class Part:
              string_direction = ""
              t = [""]
              if len(parts) == 1:
-                 print "done"
                  return ["."]
              
              for counter in range(0,len(parts)):
@@ -223,6 +222,6 @@ class Part:
               return False
          
 
-print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8]),Part(3,[12])],[1,4,5,8,9,12,13,16],4)
-
+#print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8]),Part(3,[12])],[1,4,5,8,9,12,13,16],4)
+print Part(1,[9,10]).Move("East",[1,7,15],[Part(2,[9]),Part(1,[8,12,11])],[1,4,5,8,9,12,13,16],4)
 
