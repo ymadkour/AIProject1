@@ -182,7 +182,7 @@ class Part:
              return _resutl_list
    
 
-   def _eq_ (self, other):
+    def _eq_ (self, other):
          if self.index == other.index:
              if self.parts == other.parts:
                  return True
@@ -273,7 +273,7 @@ class Part:
 
                     """ check if there is a hit between parts """        
                     for part in parts:
-                        if tempPosition in part.parts and self != part:
+                        if tempPosition in part.parts and self._eq_(part) == False:
                             flag += gridSize
                         
                             for part_position in part.parts:
