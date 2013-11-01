@@ -84,7 +84,7 @@ class Part:
                          _temp_parts = copy.deepcopy(parts)
                  directions = ["North","South","East","West"]        
                                
-             if string_direction != "":                       
+             if string_direction != "":
                  _resutl_list.append(string_direction)
              return _resutl_list
    
@@ -172,7 +172,7 @@ class Part:
 
                     """ check if there is a hit between parts """        
                     for part in parts:
-                        if tempPosition in part.parts and self != part:
+                        if tempPosition in part.parts and self._eq_(part) == False:
                             flag += gridSize
                         
                             for part_position in part.parts:
@@ -220,9 +220,9 @@ class Part:
              if self.parts == other.parts:
                  return True
          else:
-              return False   
+              return False
          
 
-
+print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8]),Part(3,[12])],[1,4,5,8,9,12,13,16],4)
 
 
