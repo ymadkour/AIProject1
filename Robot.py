@@ -273,7 +273,12 @@ class Part:
 
                     """ check if there is a hit between parts """        
                     for part in parts:
-                        if tempPosition in part.parts and self._eq_(part) == False:
+                        for temp_p in part.parts:
+                             if tempPosition == temp_p:
+                                 flag1 = True
+                             else:
+                                 flag1 = False 
+                        if flag1 == True and self._eq_(part) == False:
                             flag += gridSize
                         
                             for part_position in part.parts:
