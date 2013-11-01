@@ -101,70 +101,84 @@ class Part:
         
         return children
 
-    def depthFirstSearch(self, obstacles, parts, borders, gridSize,result_list,directions,flag):
+    def depthFirstSearch(self, obstacles, parts, borders, gridSize,result_list,directions):
 
 
              _resutl_list = result_list[:]
              _resutl_length = len(result_list)
-             _temp_parts = parts[:]
+             _temp_parts = copy.deepcopy(parts)
              _temp_length = len(parts)
              string_direction = ""
+             t = [""]
              if len(parts) == 1:
                  print "done"
                  return ["."]
              
              for counter in range(0,len(parts)):
-                 if "North" in directions and (parts[counter].Move("North",obstacles,_temp_parts,borders,gridSize) == True) and flag == False:
+                 print "test"
+                 if "North" in directions and (_temp_parts[counter].Move("North",obstacles,_temp_parts,borders,gridSize) == True):
                      print "north"
-                     string_direction = "North"
+                    
                      
                      if _temp_length == len(_temp_parts):
-                       _resutl_list+=parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["East","West"],flag)
+                       string_direction = ["North"] + _temp_parts[counter].parts
+                       t+=_temp_parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["East","West"])
                      else:
-                       _resutl_list+=parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"],flag)  
-                     if "." in _resutl_list:
+                       string_direction = ["North"] + _temp_parts[len(_temp_parts)-1].parts
+                       t+=_temp_parts[0].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"])  
+                     if "." in t:
+                         _resutl_list+= t
                          break
-                     _temp_parts = parts[:]   
-                 if "South" in directions and (parts[counter].Move("South",obstacles,_temp_parts,borders,gridSize) == True) and flag == False :
-    
+                     _temp_parts = copy.deepcopy(parts)   
+                 if "South" in directions and (_temp_parts[counter].Move("South",obstacles,_temp_parts,borders,gridSize) == True):
+                         
                          print "south"
-                         string_direction = "South"
+
                        
                          if _temp_length == len(_temp_parts):
-                            _resutl_list+=parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["East","West"],flag)
+                            string_direction = ["South"] + _temp_parts[counter].parts
+                            t+=_temp_parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["East","West"])
                          else:
-                            _resutl_list+=parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"],flag)
-                         if "." in _resutl_list:
+                            string_direction = ["South"] + _temp_parts[len(_temp_parts)-1].parts
+                            t+=_temp_parts[0].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"])
+                         if "." in t:
+                             _resutl_list+=t
                              break
-                         _temp_parts = parts[:]                
-                 if "East"in directions and (parts[counter].Move("East",obstacles,_temp_parts,borders,gridSize) == True) and flag == False:
+                         _temp_parts = copy.deepcopy(parts)                
+                 if "East"in directions and (_temp_parts[counter].Move("East",obstacles,_temp_parts,borders,gridSize) == True):
     
                          print "east"
-                         string_direction = "East"
+
     
                          if _temp_length == len(_temp_parts):
-                             _resutl_list+=parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["South","North"],flag)
+                             string_direction = ["East"] + _temp_parts[counter].parts
+                             t+=_temp_parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["South","North"])
                          else:
-                             _resutl_list+=parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"],flag)
-                         if "." in _resutl_list:
+                             string_direction = ["East"] + _temp_parts[len(_temp_parts)-1].parts
+                             t+=_temp_parts[0].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"])
+                         if "." in t:
+                             _resutl_list+=t
                              break
-                         _temp_parts = parts[:]           
+                         _temp_parts = copy.deepcopy(parts)           
     
-                 if "West" in directions and (parts[counter].Move("West",obstacles,_temp_parts,borders,gridSize)== True) and flag == False:
+                 if "West" in directions and (_temp_parts[counter].Move("West",obstacles,_temp_parts,borders,gridSize)== True):
                          print "west"
-                         string_direction = "West"
+
     
                          if _temp_length == len(_temp_parts):
-                             _resutl_list+=parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["South","North"],flag)
+                             string_direction = ["West"] + _temp_parts[counter].parts
+                             t+=_temp_parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["South","North"])
                          else:
-                             _resutl_list+=parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"],flag)
-                         if "." in _resutl_list:
+                             string_direction = ["West"] + _temp_parts[len(_temp_parts)-1].parts
+                             t+=_temp_parts[0].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"])
+                         if "." in t:
+                             _resutl_list+=t
                              break
-                         _temp_parts = parts[:]
+                         _temp_parts = copy.deepcopy(parts)
+                 directions = ["North","South","East","West"]        
                                
-                                    
-             _resutl_list.append(string_direction)
-             print _resutl_list
+             if string_direction != "":                       
+                 _resutl_list.append(string_direction)
              return _resutl_list
    
 
@@ -173,7 +187,7 @@ class Part:
     def Move(self, direction, obstacles, parts, borders, gridSize):
         
             temp_self = copy.deepcopy(self)
-            temp_self_list = self.parts[:]
+            temp_self_list = copy.deepcopy(self.parts)
             
             print "~~~~~~~~~~~~~~~" 
             mt = 0
@@ -198,12 +212,12 @@ class Part:
 
                         tempPosition = position + gridSize
                         """ check if the part hit the borders"""
-                        if tempPosition > (gridSize ** gridSize):
+                        if tempPosition > (gridSize ** 2):
                             flag -= 1
 
                     elif direction == "East":
                         _tempPosition = position + 1
-                        if position in borders and _tempPosition in borders:
+                        if position in borders and (_tempPosition in borders or _tempPosition > (gridSize ** 2)):
                             flag -=1
                         else:    
                             tempPosition = position + 1
@@ -211,7 +225,7 @@ class Part:
 
                     elif direction == "West":
                         _tempPosition = position - 1
-                        if position in borders and _tempPosition in borders:
+                        if position in borders and (_tempPosition in borders or _tempPosition < 1):
                             flag -=1    
                         else:
                             tempPosition = position - 1              
@@ -239,10 +253,10 @@ class Part:
 
                                 if differenace != 0:    
                                     new_part_position.append(new_part_position[0] + differenace)
-                                elif mt == 1:
-                                    flag1 = False    
+                                if mt == 1:
+                                    flag1 = False
                             for p in parts:
-                                if self._eq_(p) == True:
+                                if self._eq_(p) == True:            
                                     p.parts = new_part_position
                             return flag1      
 
@@ -282,7 +296,6 @@ class Part:
                             for p in parts:
                                 if self._eq_(p) == True:
                                     parts.remove(p)
-
                             parts.remove(part)
                             return True
                         

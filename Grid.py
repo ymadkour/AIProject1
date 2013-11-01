@@ -17,8 +17,8 @@ class Grid(object):
         Constructor
         '''
         self.grid_size = random.randint(2,10)
-        self.robot_parts = random.randint(1,self.grid_size)
-        self.obstacle_number = random.randint(0,(self.grid_size - 1))
+        self.robot_parts = random.randint(1,self.grid_size-1)
+        self.obstacle_number = random.randint(0,(self.grid_size - 2))
         self.parts_loctions = self.assignPartsPosition(self.robot_parts,self.grid_size)
         self.obstacles_locations = self.assignObstaclesPosition(self.obstacle_number,self.grid_size,self.parts_loctions)
         self.side_borders =  self.setBorders(self.grid_size)
@@ -26,23 +26,37 @@ class Grid(object):
         
     def assignPartsPosition(self,number,size):
         
-        total = number ** 2
+        total = size ** 2
         temp_list = []
-        for i in range(0,number):
+        i = 0
+        while i < number:
+            print "Parts loop"
+            flag1 = True
             temp_position = random.randint(1,total)
-            if temp_position not in temp_list:
-                temp_list.append(robot.Part(i,temp_position))
+            for p in temp_list:
+                if temp_position == p.parts:
+                    flag1 = False
+            if flag1 == True:
+                temp_list.append(robot.Part(i,[temp_position]))
+                i +=1
       
         return temp_list
     
     def assignObstaclesPosition(self,number,size, locations):
         
-        total = number ** 2
+        total = size ** 2
         temp_list = []
-        for i in range(0,number):
+        i = 0
+        while i < number:
+            print "obs Loop"
+            flag  = True
             temp_position = random.randint(1,total)
-            if temp_position not in locations and temp_position not in temp_list:
+            for p in locations:
+                if [temp_position] == p.parts:
+                    flag = False
+            if flag  ==  True and temp_position not in temp_list:
                 temp_list.append(temp_position)
+                i += 1
       
         return temp_list     
     
@@ -59,5 +73,6 @@ class Grid(object):
             i += grid_size
             j += grid_size
             
-        return temp_list   
+        return temp_list  
+
             
