@@ -112,9 +112,8 @@ class Part:
                             
                             parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list)]
                             if move_flag == True:
-                                self.dfs(obstacles, parts, borders, gridSize,_temp_length)    
-                            if(len(_temp_parts_list) == 1):
-                                done_flag = True
+                                self.dfs(obstacles, parts, borders, gridSize,len(parts)-1)    
+                            if(len(parts[len(parts)-1].parts_list) == 1):
                                 break
                             
                             check = 0
@@ -130,18 +129,12 @@ class Part:
         _temp_length = len(parts)
         my_limit = copy.deepcopy(limit)
         counter1=0
-        done_flag = False
+
         check = 0
         if(len(parts[_temp_length-1].parts_list) == 1 or limit == goal_limit):
-            done_flag = True
             return parts
-                                  
 
         my_limit += 1
-        
-        if index == 16:
-           t = len(parts[index].parent.parts_list)
-           n =len(parts[index].parts_list)      
 
         if len(parts[index].parent.parts_list) != len(parts[index].parts_list):
                 flag = False
@@ -176,7 +169,6 @@ class Part:
                             if move_flag == True:
                                 self.dfIDs(obstacles, parts, borders, gridSize,len(parts)-1,my_limit,goal_limit)           
                             if(len(parts[len(parts)-1].parts_list) == 1):
-                                done_flag = True
                                 break
                             
                             check = 0
@@ -441,8 +433,8 @@ class Part:
 
 test=[Node.Node(Node.Node([],"",[]),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])])]
 
-#print Part(1,[1]).bfs([12],test,[1,4,5,8,9,12,13,16],4,0)
-Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
+print Part(1,[1]).bfs([12],test,[1,4,5,8,9,12,13,16],4,0)
+#Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
 
 
 
