@@ -19,20 +19,19 @@ class Part:
         depth = 0
         goal = len(parts)
         while True:
-            for part in parts: #Flag that all parts has been visited/Also check depth/ When comes back from depth +1
-                result = part.parts.DLS(parts, obstacles, borders, gridSize, goal, depth)
-                if result == True:
+            result = self.DLS(parts, obstacles, borders, gridSize, goal, depth)
+            if result == True:
+                return True
+            try:
+                if result is None:
+                    depth += 1
+                elif len(result) == goal:
                     return True
-                try:
-                    if result is None:
-                        depth += 1
-                    elif len(result) == goal:
-                        return True
-                    else:
-                        depth+=1
-                except Exception, e:
-                    pass
-            return False
+                else:
+                    depth+=1
+            except Exception, e:
+                pass
+#                 return False
             
     def DLS(self, parts, obstacles, borders, gridSize, goal, depth):
         if depth == 0 and len(self.parts) == goal:
@@ -42,11 +41,10 @@ class Part:
         elif depth > 0:
             for child in self.expand(parts, obstacles, borders, gridSize): #All directions fail case
                 #try:
-                if(len(child) > 0):
-                    child[0].DLS(child[1], obstacles, borders, gridSize, goal, depth-1)
+                child[0].DLS(child[1], obstacles, borders, gridSize, goal, depth-1)
 #                 except Exception, e:
 #                     print e
-            return False
+                
 #         else:
 #             return None    
     
@@ -332,9 +330,8 @@ myList = [part2,part3,part4,part5]
 #print part2.Move("East",[1,7,15],myList,[1,4,5,8,9,12,13,16],4)
 # print 'hello'
 
-print part2.IDFS([1,7,15],myList,[1,4,5,8,9,12,13,16],4) , "Final Result"
+#print part2.IDFS([1,7,15],myList,[1,4,5,8,9,12,13,16],4) , "Final Result"
 
-#print part2.DLS(myList, [1,3,15], [1,4,5,8,9,12,13,16], 4, 4, 3)
-#print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[11,10,12])],[1,4,5,8,9,12,13,16],4)
+# print part2.DLS(myList, [1,7,15], [1,4,5,8,9,12,13,16], 4, 4, 3)
+print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8]),Part(3,[12])],[1,4,5,8,9,12,13,16],4)
 #print part2.depthFirstSearch([1,7,15],myList,[1,4,5,8,9,12,13,16],4,0,[],["North","South","East","West"])
-#print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8,12,11])],[1,4,5,8,9,12,13,16],4)
