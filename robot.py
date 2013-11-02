@@ -1,105 +1,209 @@
 from Queue import *
 import copy
+import Node
 
 class Part:
     """docstring for part"""
     def __init__(self, index, parts):
         self.index = index
         self.parts = parts
-
-    def _eq_ (self, other):
-        if self.index == other.index:
-            if self.parts == other.parts:
-                return True
-        else:
+        
+    def checkParts(self,other_list,other):
+        if len(other_list) != self(other):
             return False
-        
-
-    def IDFS(self,obstacles, parts, borders, gridSize):
-        depth = 0
-        goal = len(parts)
-        while True:
-            result = self.DLS(parts, obstacles, borders, gridSize, goal, depth)
-            if result == True:
-                return True
-            try:
-                if result is None:
-                    depth += 1
-                elif len(result) == goal:
-                    return True
-                else:
-                    depth+=1
-            except Exception, e:
-                pass
-#                 return False
-            
-    def DLS(self, parts, obstacles, borders, gridSize, goal, depth):
-        if depth == 0 and len(self.parts) == goal:
-            return self
-        if len(self.parts) == goal:
+        counter = 0
+        for p in range(0,len(other_list)):
+            if other_list[p].parts== other[p].parts:
+                counter +=1
+        if  counter == len(other_list):
             return True
-        elif depth > 0:
-            for child in self.expand(parts, obstacles, borders, gridSize): #All directions fail case
-                #try:
-                child[0].DLS(child[1], obstacles, borders, gridSize, goal, depth-1)
-#                 except Exception, e:
-#                     print e
+        else:
+            return False   
+        
+    def bfs(self, obstacles, parts, borders, gridSize,index):
+        
+        direction = ["North","South","East","West"]
+        _temp_length = len(parts)
+        counter1=0
+        done_flag = False
+        check = 0
+              
+        for counter in range(index,_temp_length):
+
+            if len(parts[counter].parent.parts_list) != len(parts[counter].parts_list):
+                flag = False
                 
-#         else:
-#             return None    
-    
-    def expand(self, parts, obstacles, borders, gridSize):
-        children = []
-        originalList1 = copy.deepcopy(parts)
-        originalList2 = copy.deepcopy(parts)
-        originalList3 = copy.deepcopy(parts)
-        originalList4 = copy.deepcopy(parts)
-        tmp_node1 = copy.deepcopy(self)
-        tmp_node2 = copy.deepcopy(self)
-        tmp_node3 = copy.deepcopy(self)
-        tmp_node4 = copy.deepcopy(self)
+            else:
+                counter1 = 0    
+                for p in range(0,len(parts[counter].parent.parts_list)):
+                    if parts[counter].parent.parts_list[p]._eq_( parts[counter].parts_list[p]) == True:
+                            counter1 +=1
+                    if  counter1 == len(parts[counter].parent.parts_list):
+                        flag = True
+                    else:
+                        flag =  False   
+            if flag == False:
+                for j in parts[counter].parts_list:
+                    for i in range(0,len(direction)):           
+                            _temp_parts_list = copy.deepcopy( parts[counter].parts_list)
+                            j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
+                            print "%%%%%%%%%%%"
+                            print direction[i]
+                            print j.parts
+                            for px in _temp_parts_list:
+                                print px.parts
+                            print "%%%%%%%%%%%"
+                            
+                            parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list)]
+                                
+                            if(len(_temp_parts_list) == 1):
+                                done_flag = True
+                                break
+                            
+                            check = 0
+            else:
+                check +=1                            
+                        
+                    
+        if done_flag == False and check != _temp_length * 4:
+            self.dfs(obstacles, parts, borders, gridSize,_temp_length)             
+        else:
+            return parts 
         
-        if tmp_node1.Move("North",obstacles,originalList1,borders,gridSize) == True:
-            tmpList = copy.deepcopy(originalList1)
-            for p in parts: #Removing from the original List warning
-                for item in tmpList:
-                    if item._eq_(p) == True:
-                        tmpList.remove(item)
-            originalList1.reverse()
-            child_and_parts = [tmpList[0], originalList1]
-            children.append(child_and_parts)
+        
+        
+        
+    def dfs(self, obstacles, parts, borders, gridSize,index):
+        
+        direction = ["North","South","East","West"]
+        _temp_length = len(parts)
+        counter1=0
+        done_flag = False
+        check = 0
+        if(len(parts[_temp_length-1].parts_list) == 1):
+            done_flag = True
+            return parts
+                                  
+        for counter in range(index,_temp_length):
+
+            if len(parts[counter].parent.parts_list) != len(parts[counter].parts_list):
+                flag = False
+                
+            else:
+                counter1 = 0    
+                for p in range(0,len(parts[counter].parent.parts_list)):
+                    if parts[counter].parent.parts_list[p]._eq_( parts[counter].parts_list[p]) == True:
+                            counter1 +=1
+                    if  counter1 == len(parts[counter].parent.parts_list):
+                        flag = True
+                    else:
+                        flag =  False   
+            if flag == False:
+                for j in parts[counter].parts_list:
+                    for i in range(0,len(direction)):           
+                            _temp_parts_list = copy.deepcopy( parts[counter].parts_list)
+                            move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
+                            print "%%%%%%%%%%%"
+                            print direction[i]
+                            print j.parts
+                            for px in _temp_parts_list:
+                                print px.parts
+                            print "%%%%%%%%%%%"
+                            
+                            parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list)]
+                            if move_flag == True:
+                                self.dfs(obstacles, parts, borders, gridSize,len(parts)-1)    
+                            if(len(parts[len(parts)-1].parts_list) == 1):
+                                break
+                            
+                            check = 0
+            else:
+                check +=1                            
+                        
+        return parts              
+                    
             
-        if tmp_node2.Move("South",obstacles,originalList2,borders,gridSize) == True:
-            tmpList = copy.deepcopy(originalList2)
-            for p in parts:
-                for item in tmpList:
-                    if item._eq_(p) == True:
-                        tmpList.remove(item)
-            originalList2.reverse()
-            child_and_parts = [tmpList[0], originalList2]
-            children.append(child_and_parts)
+    def dfIDs(self, obstacles, parts, borders, gridSize,index,limit,goal_limit):
         
-        if tmp_node3.Move("East",obstacles,originalList3,borders,gridSize) == True:
-            tmpList = copy.deepcopy(originalList3)
-            for p in parts:
-                for item in tmpList:
-                    if item._eq_(p) == True:
-                        tmpList.remove(item)
-            originalList3.reverse()
-            child_and_parts = [tmpList[0], originalList3]
-            children.append(child_and_parts)
+        direction = ["North","South","East","West"]
+        _temp_length = len(parts)
+        my_limit = copy.deepcopy(limit)
+        counter1=0
+
+        check = 0
+        if(len(parts[_temp_length-1].parts_list) == 1 or limit == goal_limit):
+            return parts
+
+        my_limit += 1
+
+        if len(parts[index].parent.parts_list) != len(parts[index].parts_list):
+                flag = False
+                
+        else:
+                counter1 = 0    
+                for p in range(0,len(parts[index].parent.parts_list)):
+                            print len(parts)
+                            print index
+                            print p
+        
+                            if parts[index].parent.parts_list[p]._eq_( parts[index].parts_list[p]) == True:
+                                    counter1 +=1
+                            if  counter1 == len(parts[index].parent.parts_list):
+                                flag = True
+                            else:
+                                flag =  False   
+        if flag == False:
+                for j in parts[index].parts_list:
+                    
+                    for i in range(0,len(direction)):
+                                       
+                            _temp_parts_list = copy.deepcopy( parts[index].parts_list)
+                            move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
+                            print "%%%%%%%%%%%"
+                            print direction[i]
+                            print j.parts
+                            for px in _temp_parts_list:
+                                print px.parts
+                            print "%%%%%%%%%%%"
+                            parts +=[Node.Node(parts[index],direction[i],_temp_parts_list)]
+                            if move_flag == True:
+                                self.dfIDs(obstacles, parts, borders, gridSize,len(parts)-1,my_limit,goal_limit)           
+                            if(len(parts[len(parts)-1].parts_list) == 1):
+                                break
+                            
+                            check = 0
+        else:
+                check +=1                            
+                        
+        return parts     
+     
+     
+    def ID (self, obstacles, parts, borders, gridSize):
+         
+         
+          
+        limit = 1;
+        length = len(parts)
+        dif = length
+         
+        while True :
+            (parts[0].parts_list[0]).dfIDs(obstacles,parts,borders,gridSize,len(parts)-1,0,limit)
+            parts.append(parts[0])
+            print dif
+            print len(parts)
+            limit +=1;
+            if len(parts) == 55:
+                te = 0
+            if len(parts)- length == dif or parts[len(parts)-2].parts_list == 1:
+                break
             
-        if tmp_node4.Move("West",obstacles,originalList4,borders,gridSize) == True:
-            tmpList = copy.deepcopy(originalList4)
-            for p in parts:
-                for item in tmpList:
-                    if item._eq_(p) == True:
-                        tmpList.remove(item)
-            originalList4.reverse()
-            child_and_parts = [tmpList[0], originalList4]
-            children.append(child_and_parts)
-        
-        return children
+            else:
+                dif = len(parts) - length
+                length = len(parts)
+                
+                
+              
+
 
     def depthFirstSearch(self, obstacles, parts, borders, gridSize,result_list,directions):
 
@@ -182,15 +286,7 @@ class Part:
              return _resutl_list
    
 
-    def _eq_ (self, other):
-         if self.index == other.index:
-             if self.parts == other.parts:
-                 return True
-         else:
-              return False   
-         
-
-    
+   
 
     def Move(self, direction, obstacles, parts, borders, gridSize):
         
@@ -304,6 +400,7 @@ class Part:
                                         new_part_position.append(new_part_position[0] + differenace) 
 
                             new_part_position += part.parts
+                            new_part_position.sort()
                             
                             parts.append(Part(self.index, new_part_position))
                             for p in parts:
@@ -320,18 +417,25 @@ class Part:
                     temp_self.parts [counter_position] = tempPosition
                     counter_position += 1
  
-gridSize = 4
-part2 = Part(1,[9])
-part3 = Part(2,[10])
-part4 = Part(3,[8])
-part5 = Part(4,[12])
-myList = [part2,part3,part4,part5]
+ 
+    def _eq_ (self, other):
+         if self.index == other.index:
+             if self.parts == other.parts:
+                 return True
+         else:
+              return False   
+         
 
-#print part2.Move("East",[1,7,15],myList,[1,4,5,8,9,12,13,16],4)
-# print 'hello'
 
-#print part2.IDFS([1,7,15],myList,[1,4,5,8,9,12,13,16],4) , "Final Result"
 
-# print part2.DLS(myList, [1,7,15], [1,4,5,8,9,12,13,16], 4, 4, 3)
-print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8]),Part(3,[12])],[1,4,5,8,9,12,13,16],4)
-#print part2.depthFirstSearch([1,7,15],myList,[1,4,5,8,9,12,13,16],4,0,[],["North","South","East","West"])
+
+
+
+test=[Node.Node(Node.Node([],"",[]),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])])]
+
+print Part(1,[1]).bfs([12],test,[1,4,5,8,9,12,13,16],4,0)
+#Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
+
+
+
+
