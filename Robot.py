@@ -445,5 +445,11 @@ test=[Node.Node(Node.Node([],"",[]),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])])]
 Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
 
 
+<<<<<<< HEAD
 
 
+=======
+# print part2.DLS(myList, [1,7,15], [1,4,5,8,9,12,13,16], 4, 4, 3)
+print Part(1,[9,10]).Move("East",[1,7,15],[Part(1,[9,10]),Part(2,[8]),Part(3,[12])],[1,4,5,8,9,12,13,16],4)
+#print part2.depthFirstSearch([1,7,15],myList,[1,4,5,8,9,12,13,16],4,0,[],["North","South","East","West"])
+>>>>>>> e785ccecc719cfc62dd41a3c1d5f112ad42d49a7
