@@ -1,0 +1,51 @@
+from Tkinter import *
+
+class Application(Frame):
+    
+    def __init__(self,master):
+        Frame.__init__(self, master)
+        self.boardsize = 400
+        self.sqsize = self.boardsize//10
+        master.title("Canvas with extra space")
+        self.grid(row=0,column=0)
+        self.create_widgets()
+        
+    
+    def create_widgets(self):
+        
+        
+        #Canvas#
+        self.board = Canvas(self, width=self.boardsize, height=self.boardsize,bg='white')
+        self.board.grid(row=1,column=0)
+        for row in range(5):
+            for col in range(5):
+                top = row * self.sqsize
+                left = col * self.sqsize
+                bottom = row * self.sqsize + self.sqsize -2
+                right = col * self.sqsize + self.sqsize -2
+                rect = self.board.create_rectangle(left,top,right,bottom,outline='gray',fill='')
+                #t = Label(self.board, text="Hello John, Michael, Eric, ...", anchor='w')
+                #canvas.create_rectangle(20, 20, 120, 120, fill="red", outline = 'blue') 
+                print "draw"
+        self.board.focus_set()
+
+        
+    def reveal(self):
+        content = self.password.get()
+        if content == "password":
+            message = "Breached!!"
+        else:
+            message = "Secure"
+        self.text.delete(0.0, END)
+        self.text.insert(0.0, message)
+    
+    def update_count(self):
+        self.button_clicks+=1
+        self.button1["text"] = "Total clicks: " + str(self.button_clicks)
+        
+root = Tk()
+root.title("Robot App")
+root.geometry("400x400")
+
+app = Application(root)
+root.mainloop()
