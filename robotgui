@@ -9,24 +9,37 @@ class Application(Frame):
         master.title("Canvas with extra space")
         self.grid(row=0,column=0)
         self.create_widgets()
+        #self.options_window()
+        
+        
+    def options_window(self):
+        self.button1 = Button(self, text="generate")
+        self.button1.grid()
         
     
     def create_widgets(self):
         
-        
+        robots=[1,4,7,9,12,14,15,20,22,26,30,34,36]
+        obstacles = [2,6,8,10,17,24,35]
         #Canvas#
         self.board = Canvas(self, width=self.boardsize, height=self.boardsize,bg='white')
-        self.board.grid(row=1,column=0)
-        for row in range(5):
-            for col in range(5):
+        self.board.grid(row=1,column=1)
+        gridSize = 6
+        position = 1
+        for row in range(gridSize):
+            for col in range(gridSize):
                 top = row * self.sqsize
                 left = col * self.sqsize
                 bottom = row * self.sqsize + self.sqsize -2
                 right = col * self.sqsize + self.sqsize -2
-                rect = self.board.create_rectangle(left,top,right,bottom,outline='gray',fill='')
-                #t = Label(self.board, text="Hello John, Michael, Eric, ...", anchor='w')
-                #canvas.create_rectangle(20, 20, 120, 120, fill="red", outline = 'blue') 
-                print "draw"
+                self.board.create_rectangle(left,top,right,bottom,outline='gray',fill='')
+                
+        #for i in len(robots):
+                if position in robots:
+                    self.board.create_text((left+right)/2,(top+bottom)/2,text="R")
+                if position in obstacles:
+                    self.board.create_text((left+right)/2,(top+bottom)/2,text="O")
+                position+=1
         self.board.focus_set()
 
         
@@ -42,7 +55,9 @@ class Application(Frame):
     def update_count(self):
         self.button_clicks+=1
         self.button1["text"] = "Total clicks: " + str(self.button_clicks)
-        
+
+robots=[1,2,3,8]
+obstacles=[14,16]        
 root = Tk()
 root.title("Robot App")
 root.geometry("400x400")
