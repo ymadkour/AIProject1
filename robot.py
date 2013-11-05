@@ -29,6 +29,9 @@ class Part:
         check = 0
               
         for counter in range(index,_temp_length):
+            
+            if done_flag == True:
+                break
 
             if len(parts[counter].parent.parts_list) != len(parts[counter].parts_list):
                 flag = False
@@ -54,19 +57,23 @@ class Part:
                                 print px.parts
                             print "%%%%%%%%%%%"
                             
-                            parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list)]
+                            parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list,0,0)]
                                 
                             if(len(_temp_parts_list) == 1):
                                 done_flag = True
                                 break
                             
                             check = 0
+                            
+                    if done_flag == True:
+                        break      
+                            
             else:
                 check +=1                            
                         
                     
         if done_flag == False and check != _temp_length * 4:
-            self.dfs(obstacles, parts, borders, gridSize,_temp_length)             
+            self.bfs(obstacles, parts, borders, gridSize,_temp_length)             
         else:
             return parts 
         
@@ -79,9 +86,8 @@ class Part:
         _temp_length = len(parts)
         counter1=0
         done_flag = False
-        check = 0
         if(len(parts[_temp_length-1].parts_list) == 1):
-            done_flag = True
+
             return parts
                                   
         for counter in range(index,_temp_length):
@@ -100,6 +106,8 @@ class Part:
                         flag =  False   
             if flag == False:
                 for j in parts[counter].parts_list:
+                    if done_flag == True:
+                        break
                     for i in range(0,len(direction)):           
                             _temp_parts_list = copy.deepcopy( parts[counter].parts_list)
                             move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
@@ -110,15 +118,12 @@ class Part:
                                 print px.parts
                             print "%%%%%%%%%%%"
                             
-                            parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list)]
+                            parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list,0,0)]
                             if move_flag == True:
                                 self.dfs(obstacles, parts, borders, gridSize,len(parts)-1)    
                             if(len(parts[len(parts)-1].parts_list) == 1):
-                                break
-                            
-                            check = 0
-            else:
-                check +=1                            
+                                done_flag = True
+                                break                           
                         
         return parts              
                     
@@ -129,8 +134,6 @@ class Part:
         _temp_length = len(parts)
         my_limit = copy.deepcopy(limit)
         counter1=0
-
-        check = 0
         if(len(parts[_temp_length-1].parts_list) == 1 or limit == goal_limit):
             return parts
 
@@ -170,18 +173,12 @@ class Part:
                                 self.dfIDs(obstacles, parts, borders, gridSize,len(parts)-1,my_limit,goal_limit)           
                             if(len(parts[len(parts)-1].parts_list) == 1):
                                 break
-                            
-                            check = 0
-        else:
-                check +=1                            
-                        
+
         return parts     
      
      
     def ID (self, obstacles, parts, borders, gridSize):
-         
-         
-          
+               
         limit = 1;
         length = len(parts)
         dif = length
@@ -192,8 +189,7 @@ class Part:
             print dif
             print len(parts)
             limit +=1;
-            if len(parts) == 55:
-                te = 0
+            
             if len(parts)- length == dif or parts[len(parts)-2].parts_list == 1:
                 break
             
@@ -202,91 +198,37 @@ class Part:
                 length = len(parts)
                 
                 
+    """self is a node """ 
               
-
-
-    def depthFirstSearch(self, obstacles, parts, borders, gridSize,result_list,directions):
-
-
-             _resutl_list = result_list[:]
-             _resutl_length = len(result_list)
-             _temp_parts = copy.deepcopy(parts)
-             _temp_length = len(parts)
-             string_direction = ""
-             t = [""]
-             if len(parts) == 1:
-                 print "done"
-                 return ["."]
-             
-             for counter in range(0,len(parts)):
-                 print "test"
-                 if "North" in directions and (_temp_parts[counter].Move("North",obstacles,_temp_parts,borders,gridSize) == True):
-                     print "north"
-                    
-                     
-                     if _temp_length == len(_temp_parts):
-                       string_direction = ["North"] + _temp_parts[counter].parts
-                       t+=_temp_parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["East","West"])
-                     else:
-                       string_direction = ["North"] + _temp_parts[len(_temp_parts)-1].parts
-                       t+=_temp_parts[0].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"])  
-                     if "." in t:
-                         _resutl_list+= t
-                         break
-                     _temp_parts = copy.deepcopy(parts)   
-                 if "South" in directions and (_temp_parts[counter].Move("South",obstacles,_temp_parts,borders,gridSize) == True):
-                         
-                         print "south"
-
-                       
-                         if _temp_length == len(_temp_parts):
-                            string_direction = ["South"] + _temp_parts[counter].parts
-                            t+=_temp_parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["East","West"])
-                         else:
-                            string_direction = ["South"] + _temp_parts[len(_temp_parts)-1].parts
-                            t+=_temp_parts[0].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"])
-                         if "." in t:
-                             _resutl_list+=t
-                             break
-                         _temp_parts = copy.deepcopy(parts)                
-                 if "East"in directions and (_temp_parts[counter].Move("East",obstacles,_temp_parts,borders,gridSize) == True):
+    def expandNode(self,parts,borders,obstacles,gridSize):
+        expanded_nodes = []
+        direction = ["North","South","East","West"]
+          
+        
+        for i in range(0,len(direction)):
+            temp_parts = copy.deepcopy(parts) 
+            temp_self = copy.deepcopy(self) 
+            flag = temp_self.Move(direction[i], obstacles,temp_parts.parts_list, borders, gridSize)
+            
+            if flag == False:
+                node = [Node.Node(parts.parts_list,direction[i],temp_parts.parts_list,100,100)]
+            elif flag == True and len(parts.parts_list) == len(temp_parts.parts_list):                
+                node = [Node.Node(parts.parts_list,direction[i],temp_parts.parts_list,temp_parts.heurisitc_value,1)]
+            elif flag == True and len(parts.parts_list) != len(temp_parts.parts_list):               
+                node = [Node.Node(parts.parts_list,direction[i],temp_parts.parts_list,temp_parts.heurisitc_value - 1,0)]         
+            print direction[i]    
+            print node[0].heurisitc_value
+            expanded_nodes += [flag] + node   
+        
+        return expanded_nodes
     
-                         print "east"
-
     
-                         if _temp_length == len(_temp_parts):
-                             string_direction = ["East"] + _temp_parts[counter].parts
-                             t+=_temp_parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["South","North"])
-                         else:
-                             string_direction = ["East"] + _temp_parts[len(_temp_parts)-1].parts
-                             t+=_temp_parts[0].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"])
-                         if "." in t:
-                             _resutl_list+=t
-                             break
-                         _temp_parts = copy.deepcopy(parts)           
     
-                 if "West" in directions and (_temp_parts[counter].Move("West",obstacles,_temp_parts,borders,gridSize)== True):
-                         print "west"
-
+    def greedy(self,parts,borders,obstacles,gridSize):
+        
     
-                         if _temp_length == len(_temp_parts):
-                             string_direction = ["West"] + _temp_parts[counter].parts
-                             t+=_temp_parts[counter].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["South","North"])
-                         else:
-                             string_direction = ["West"] + _temp_parts[len(_temp_parts)-1].parts
-                             t+=_temp_parts[0].depthFirstSearch(obstacles,_temp_parts,borders,gridSize,_resutl_list,["North","South","East","West"])
-                         if "." in t:
-                             _resutl_list+=t
-                             break
-                         _temp_parts = copy.deepcopy(parts)
-                 directions = ["North","South","East","West"]        
-                               
-             if string_direction != "":                       
-                 _resutl_list.append(string_direction)
-             return _resutl_list
-   
 
-   
+               
 
     def Move(self, direction, obstacles, parts, borders, gridSize):
         
@@ -370,10 +312,10 @@ class Part:
                     """ check if there is a hit between parts """        
                     for part in parts:
                         for temp_p in part.parts:
-                             if tempPosition == temp_p:
-                                 flag1 = True
-                             else:
-                                 flag1 = False 
+                            if tempPosition == temp_p:
+                                flag1 = True
+                            else:
+                                flag1 = False 
                         if flag1 == True and self._eq_(part) == False:
                             flag += gridSize
                         
@@ -389,8 +331,6 @@ class Part:
                                     new_part_position = [(tempPosition - 1)]
                                 elif direction == "West":
                                     new_part_position = [(tempPosition + 1)]
-
-
 
                                 for old_position in temp_self_list:
                                 
@@ -431,11 +371,11 @@ class Part:
 
 
 
-test=[Node.Node(Node.Node([],"",[]),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])])]
+test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1]),Part(4,[10])],2,0)]
 
-print Part(1,[1]).bfs([12],test,[1,4,5,8,9,12,13,16],4,0)
+print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
 #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
-
+#(test[0].parts_list[0]).expandNode(test[0],[1,4,5,8,9,12,13,16],[12],4)
 
 
 

@@ -10,10 +10,12 @@ class Node(object):
     '''
 
 
-    def __init__(self,parent,direction,parts_list):
+    def __init__(self,parent,direction,parts_list,heurisitc_value,cost):
         self.parent = parent
         self.direction =  direction
         self.parts_list = parts_list
+        self.heurisitc_value = heurisitc_value
+        self.cost = cost
         '''
         Constructor
         '''
