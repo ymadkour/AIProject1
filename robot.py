@@ -1,6 +1,7 @@
 from Queue import *
 import copy
 import Node
+import math
 
 class Part:
     """docstring for part"""
@@ -223,12 +224,7 @@ class Part:
         return expanded_nodes
     
     
-    
-    def greedy(self,parts,borders,obstacles,gridSize):
-        
-    
-
-               
+              
 
     def Move(self, direction, obstacles, parts, borders, gridSize):
         
@@ -366,14 +362,84 @@ class Part:
               return False   
          
 
+def isSameRow (part1,part2,gridSize):
+    for i in range (1, gridSize+1):
+        start = i*gridSize - gridSize + 1
+        end = i*gridSize
+        if start<=part1 and part1<=end and start<=part2 and part2<=end:
+            return True
+    return False
 
+def getHeuristicHelper(part1, part2, gridSize):
+    if isSameRow(part1, part2, gridSize):
+        return abs(part1-part2) - 1
+    else:
+        row1 = (part1//gridSize)+1
+        row2 = (part2//gridSize)+1
+        
+        diff = abs(row1 - row2)
+        if diff == 0:
+            return 1;
+        maximum = max (part1, part2)
+        minimum = min (part1, part2)
+        
+        heuristic1 = diff
+        
+        newLoc = maximum - (gridSize*diff)
+        
+        heuristic2 = abs(newLoc-minimum) - 1
+#         sameRow = maximum - diff #As if i raised the part to be in the same row with the other part
+#         
+#         heuristic2 = abs(minimum - sameRow)-1
+        
+        return heuristic1 + heuristic2
 
+def getHeuristicHelper2(part,listOfParts ,gridSize):
+    allHeuristics2 = []
+    for part1 in listOfParts:
+        allHeuristics3 = []
+        for part2 in part.parts:
+            #allHeuristics3 = []
+            for part3 in part1.parts:
+                heuristic3 = getHeuristicHelper(part3, part2, gridSize)
+                allHeuristics3.append(heuristic3)
+        allHeuristics2.append(min(allHeuristics3))
+    allHeuristics2.remove(-1)
+    return min(allHeuristics2)
+        
+def getHeuristic(listOfParts, gridSize):
+    allHeuristics = 0
+    for part in listOfParts:
+        allHeuristics += getHeuristicHelper2(part,listOfParts, gridSize)
+    if allHeuristics > 1:
+        allHeuristics = allHeuristics//2
+    return allHeuristics
 
+#test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1]),Part(4,[10])],2,0)]
+gridSize = 4
+part2 = Part(1,[1,2,3,4,5,6,7,8])
+# part3 = Part(2,[7])
+# part4 = Part(3,[9])
+part5 = Part(4,[15])
+myList = [part2,part5]
 
+# gridSize = 5
+# part12 = Part(1,[1])
+# part13 = Part(2,[4])
+# part14 = Part(3,[12])
+# part15 = Part(4,[14])
+# part16 = Part(5,[20])
+# part17 = Part(6,[24])
+# myList = [part12,part13,part14,part15,part16,part17]
 
-test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1]),Part(4,[10])],2,0)]
+print getHeuristic(myList,gridSize)
 
-print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
+#print getHeuristicHelper(20,24,5)
+#print isSameRow(10, 11, 4)
+
+#print getHeuristicHelper2(Part(1,[15]),myList,gridSize)
+
+#print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
 #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
 #(test[0].parts_list[0]).expandNode(test[0],[1,4,5,8,9,12,13,16],[12],4)
 
