@@ -264,7 +264,7 @@ class Part:
                         
                         
                         if move_flag == True:
-                           node_heuristic = node.checkGoal(_temp_parts_list.parts_list)
+                           node_heuristic = node.getHeuristic(_temp_parts_list.parts_list,gridSize)
                         else:
                             node_heuristic = 10000            
                         parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost)]
@@ -312,7 +312,7 @@ class Part:
                         
                         
                         if move_flag == True:
-                           node_heuristic = node.checkGoal(_temp_parts_list.parts_list)
+                           node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
                         else:
                             node_heuristic = 10000            
                         parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost+parts[min_index].cost)]
@@ -533,7 +533,7 @@ myList = [part2,part5]
 # part17 = Part(6,[24])
 # myList = [part12,part13,part14,part15,part16,part17]
 
-print getHeuristic(myList,gridSize)
+#print getHeuristic(myList,gridSize)
 
 #print getHeuristicHelper(20,24,5)
 #print isSameRow(10, 11, 4)
@@ -542,9 +542,9 @@ print getHeuristic(myList,gridSize)
 
 #print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
 
-#test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],2,0)]
+test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],2,0)]
 
-#print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
+print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
 #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
 #(test[0].parts_list[0]).expandNode(test[0],[1,4,5,8,9,12,13,16],[12],4)
 
