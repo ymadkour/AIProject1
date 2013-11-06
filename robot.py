@@ -264,7 +264,7 @@ class Part:
                         
                         
                         if move_flag == True:
-                           node_heuristic = node.getHeuristic(_temp_parts_list.parts_list,gridSize)
+                           node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
                         else:
                             node_heuristic = 10000            
                         parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost)]
@@ -312,10 +312,11 @@ class Part:
                         
                         
                         if move_flag == True:
-                           node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
+                        
+                            node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
                         else:
                             node_heuristic = 10000            
-                        parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost+parts[min_index].cost)]
+                        parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost+parts[min_index].cost -1)]
    
                            
                        
@@ -438,12 +439,30 @@ class Part:
 
                             new_part_position += part.parts
                             new_part_position.sort()
+                            new_part = Part(self.index, new_part_position)
                             
-                            parts.parts_list.append(Part(self.index, new_part_position))
                             for p in parts.parts_list:
                                 if self._eq_(p) == True:
                                     parts.parts_list.remove(p)
                             parts.parts_list.remove(part)
+                            new_part_position1 = []
+                            for part_position in parts.parts_list:
+                                for pat in part_position.parts:
+                                    for pa in new_part_position:
+                                        
+                                        if direction == "North" or direction == "South":
+                                            if pat == pa -1 or pat == pa + 1:
+                                                new_part_position1 += [pat]
+                                                parts.parts_list.remove(part_position) 
+                                            
+                                        elif direction == "East" or direction == "West":
+                                            if pat == pa - gridSize or pat == pa + gridSize:
+                                                new_part_position1 += [pat]
+                                                parts.parts_list.remove(part_position)
+                                       
+                            
+                            new_part.parts += new_part_position1    
+                            parts.parts_list.append(new_part)
                             return True
                         
                     temp_length = len(self.parts) - 1                        
@@ -509,6 +528,8 @@ def getHeuristicHelper2(part,listOfParts ,gridSize):
     return min(allHeuristics2)
         
 def getHeuristic(listOfParts, gridSize):
+    if len(listOfParts) == 1:
+        return 0 
     allHeuristics = 0
     for part in listOfParts:
         allHeuristics += getHeuristicHelper2(part,listOfParts, gridSize)
@@ -542,7 +563,7 @@ myList = [part2,part5]
 
 #print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
 
-test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],2,0)]
+test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],getHeuristicHelper2(Part(1,[1]),[Part(1,[4]),Part(2,[7]),Part(3,[1])],4),0)]
 
 print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
 #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
