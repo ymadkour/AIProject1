@@ -5,6 +5,7 @@ Created on Oct 31, 2013
 '''
 import random
 import robot
+import Node
 
 class Grid(object):
     '''
@@ -30,7 +31,6 @@ class Grid(object):
         temp_list = []
         i = 0
         while i < number:
-            print "Parts loop"
             flag1 = True
             temp_position = random.randint(1,total)
             for p in temp_list:
@@ -40,7 +40,7 @@ class Grid(object):
                 temp_list.append(robot.Part(i,[temp_position]))
                 i +=1
       
-        return temp_list
+        return [Node.Node(Node.Node([],"",[],0,0),"",temp_list,robot.getHeuristic(temp_list, size),0,False)]
     
     def assignObstaclesPosition(self,number,size, locations):
         
@@ -48,7 +48,6 @@ class Grid(object):
         temp_list = []
         i = 0
         while i < number:
-            print "obs Loop"
             flag  = True
             temp_position = random.randint(1,total)
             for p in locations:
