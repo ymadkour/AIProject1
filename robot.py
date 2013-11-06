@@ -24,7 +24,7 @@ class Part:
         
         direction = ["North","South","East","West"]
         _temp_length = len(parts)
-        counter1=0
+
         done_flag = False
         check = 0
               
@@ -36,28 +36,22 @@ class Part:
             if len(parts[counter].parent.parts_list) != len(parts[counter].parts_list):
                 flag = False
                 
-            else:
-                counter1 = 0    
-                for p in range(0,len(parts[counter].parent.parts_list)):
-                    if parts[counter].parent.parts_list[p]._eq_( parts[counter].parts_list[p]) == True:
-                            counter1 +=1
-                    if  counter1 == len(parts[counter].parent.parts_list):
-                        flag = True
-                    else:
-                        flag =  False   
-            if flag == False:
+   
+                
+            if parts[counter].enterd == False:
                 for j in parts[counter].parts_list:
                     for i in range(0,len(direction)):           
                             _temp_parts_list = copy.deepcopy( parts[counter])
-                            j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
+                            move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
                             print "%%%%%%%%%%%"
                             print direction[i]
                             print j.parts
                             for px in _temp_parts_list.parts_list:
                                 print px.parts
                             print "%%%%%%%%%%%"
-                            
-                            parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list.parts_list,0,0)]
+                            node = [Node.Node(parts[counter],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
+                            node[0].enterd = move_flag
+                            parts += node
                                 
                             if(len(_temp_parts_list.parts_list) == 1):
                                 done_flag = True
@@ -118,7 +112,9 @@ class Part:
                                 print px.parts
                             print "%%%%%%%%%%%"
                             
-                            parts +=[Node.Node(parts[counter],direction[i],_temp_parts_list.parts_list,0,0)]
+                            node = [Node.Node(parts[counter],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
+                            node[0].enterd = move_flag
+                            parts += node
                             if move_flag == True:
                                 self.dfs(obstacles, parts, borders, gridSize,len(parts)-1)    
                             if(len(parts[len(parts)-1].parts_list) == 1):
@@ -161,14 +157,14 @@ class Part:
                     for i in range(0,len(direction)):
                                        
                             _temp_parts_list = copy.deepcopy( parts[index])
-                            move_flag = j.Move(direction[i],obstacles,_temp_parts_list.parts_list,borders,gridSize)
+                            move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
                             print "%%%%%%%%%%%"
                             print direction[i]
                             print j.parts
                             for px in _temp_parts_list.parts_list:
                                 print px.parts
                             print "%%%%%%%%%%%"
-                            parts +=[Node.Node(parts[index],direction[i],_temp_parts_list.parts_list)]
+                            parts +=[Node.Node(parts[index],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
                             if move_flag == True:
                                 self.dfIDs(obstacles, parts, borders, gridSize,len(parts)-1,my_limit,goal_limit)           
                             if(len(parts[len(parts)-1].parts_list) == 1):
@@ -423,31 +419,43 @@ class Part:
                                     parts.parts_list.remove(p)
                             parts.parts_list.remove(part)
                             new_part_position1 = []
-                            for part_position in parts.parts_list:
+                            
+                            while True:
+                                break_counter = 0
                                 stop_flag = False
-                                for pat in part_position.parts:
-                                    for pa in new_part_position:
-                                        
-                                        if direction == "North" or direction == "South":
-                                            if pat == pa -1 or pat == pa + 1:
-                                                new_part_position1 += [pat]
-                                                parts.parts_list.remove(part_position)
-                                                stop_flag = True
-                                                break 
+                                for pat in parts.parts_list:
+                                    for tem_pat in pat.parts:
+                                        for pa in new_part_position:
                                             
-                                        elif direction == "East" or direction == "West":
-                                            if pat == pa - gridSize or pat == pa + gridSize:
-                                                new_part_position1 += [pat]
-                                                parts.parts_list.remove(part_position)
-                                                stop_flag = True
-                                                break
+                                            if direction == "North" or direction == "South":
+                                                if tem_pat == pa -1 or tem_pat == pa + 1:
+                                                    new_part_position1 += pat.parts
+                                                    parts.parts_list.remove(pat)
+                                                    stop_flag = True
+                                                    break
+                                                else:
+                                                    break_counter +=1   
                                                 
-                                if stop_flag  == True:
-                                     break   
+                                            elif direction == "East" or direction == "West":
+                                                if tem_pat == pa - gridSize or tem_pat == pa + gridSize:
+                                                    new_part_position1 += pat.parts
+                                                    parts.parts_list.remove(pat)
+                                                    stop_flag = True
+                                                    break
+                                                else:
+                                                    break_counter +=1  
+                                              
+                                                
+                                    if stop_flag  == True:
+                                     break
+                                if break_counter >= len(parts.parts_list):
+                                     break
+                                
                                        
                             
                             new_part.parts += new_part_position1    
                             parts.parts_list.append(new_part)
+                            list(set(parts.parts_list))
                             return True
                         
                     temp_length = len(self.parts) - 1                        
@@ -548,8 +556,9 @@ def getHeuristic(listOfParts, gridSize):
 # 
 # #print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
 # 
-# test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],getHeuristicHelper2(Part(1,[1]),[Part(1,[4]),Part(2,[7]),Part(3,[1])],4),0)]
-# 
+#test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[2]),Part(4,[8])],getHeuristicHelper2(Part(1,[1]),[Part(1,[4]),Part(2,[7]),Part(3,[1])],4),0)]
+#Part(3,[2]).Move( "East", [12], test[0], [1,4,5,8,9,12,13,16], 4) 
+#print test
 # print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
 # #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
 # #(test[0].parts_list[0]).expandNode(test[0],[1,4,5,8,9,12,13,16],[12],4)

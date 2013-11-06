@@ -23,11 +23,11 @@ def Search(grid, strategy, visualize):
     
     
 grid = GenGrid()
-print Search(grid,"Greedy",False)
-# print Search(grid,"BFS",False)
-# print Search(grid,"DFS",False)
-# print Search(grid,"IDFS",False)
-# print Search(grid,"A*",False)
+#print Search(grid,"Greedy",False)
+#print Search(grid,"BFS",False)
+#print Search(grid,"DFS",False)
+#print Search(grid,"IDFS",False)
+print Search(grid,"A*",False)
 
 # print part2.depthFirstSearch([7],myList,[1,5,6,10,11,15,16,20,21,25],5,[],["North","South","East","West"],False)
 # print g.grid_size
