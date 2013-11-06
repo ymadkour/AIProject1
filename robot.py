@@ -233,7 +233,7 @@ class Part:
         direction = ["North","South","East","West"]
         _temp_length = len(parts)
         flag = False
-        cost = 100;
+
         if flag == False:
             temp_min_node = parts[len(parts)-1]
             min_index = len(parts)-1
@@ -246,7 +246,13 @@ class Part:
                     elif   parts[j].enterd == True:
                         check_flag +=1
     
-            if check_flag == len(parts) or len(parts[len(parts)-1].parts_list) == 1:
+            print "%%%%%%%%%%%"
+            print temp_min_node.direction
+            for px in temp_min_node.parts_list:
+                print px.parts
+            print "%%%%%%%%%%%"
+            parts[min_index].enterd = True
+            if check_flag == len(parts) or (len(parts[min_index].parts_list) == 1 and parts[min_index].enterd == True):
                 return parts
                            
 
@@ -254,13 +260,9 @@ class Part:
                 for i in range(0,len(direction)):           
                         _temp_parts_list = copy.deepcopy( parts[min_index])
                         move_flag = node.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
-                        print "%%%%%%%%%%%"
-                        print direction[i]
-                        for px in _temp_parts_list.parts_list:
-                            print px.parts
-                        print "%%%%%%%%%%%"
                         
-                        parts[min_index].enterd = True
+                        
+                        
                         if move_flag == True:
                            node_heuristic = node.checkGoal(_temp_parts_list.parts_list)
                         else:
@@ -268,9 +270,6 @@ class Part:
                         parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost)]
    
                            
-                        if(len(_temp_parts_list.parts_list) == 1):
-                            done_flag = True
-                            break
 
    
         self.greedy(parts,borders,obstacles,gridSize,check_flag)             
@@ -294,7 +293,15 @@ class Part:
                     elif   parts[j].enterd == True:
                         check_flag +=1
     
-            if check_flag == len(parts) or len(parts[len(parts)-1].parts_list) == 1:
+            print "%%%%%%%%%%%"
+            print temp_min_node.direction
+            print temp_min_node.heurisitc_value
+            print temp_min_node.cost
+            for px in temp_min_node.parts_list:
+                print px.parts
+            print "%%%%%%%%%%%"
+            parts[min_index].enterd = True
+            if check_flag == len(parts) or (len(parts[min_index].parts_list) == 1 and parts[min_index].enterd == True):
                 return parts
                            
 
@@ -302,13 +309,8 @@ class Part:
                 for i in range(0,len(direction)):           
                         _temp_parts_list = copy.deepcopy( parts[min_index])
                         move_flag = node.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
-                        print "%%%%%%%%%%%"
-                        print direction[i]
-                        for px in _temp_parts_list.parts_list:
-                            print px.parts
-                        print "%%%%%%%%%%%"
                         
-                        parts[min_index].enterd = True
+                        
                         if move_flag == True:
                            node_heuristic = node.checkGoal(_temp_parts_list.parts_list)
                         else:
@@ -316,9 +318,7 @@ class Part:
                         parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost+parts[min_index].cost)]
    
                            
-                        if(len(_temp_parts_list.parts_list) == 1):
-                            done_flag = True
-                            break
+                       
 
    
         self.astar(parts,borders,obstacles,gridSize,check_flag)             
@@ -330,7 +330,7 @@ class Part:
             temp_self = copy.deepcopy(self)
             temp_self_list = copy.deepcopy(self.parts)
             
-            print "~~~~~~~~~~~~~~~" 
+         
             mt = 0
             while (True):
 
@@ -344,8 +344,7 @@ class Part:
                     if direction == "North":
 
                         tempPosition = position - gridSize
-                        print tempPosition
-                        print "---------"
+                        
                         """ check if the part hit the borders"""
                         if tempPosition <= 0:
                             flag -= 1                        
@@ -391,7 +390,7 @@ class Part:
                             for old_position in temp_self_list:
                                 
                                 differenace = old_position - temp_self_list[counter_position]
-                                t = abs(differenace)
+                               
 
                                 if differenace != 0:    
                                     new_part_position.append(new_part_position[0] + differenace)
@@ -449,7 +448,7 @@ class Part:
                         
                     temp_length = len(self.parts) - 1                        
                     if flag < 0 and temp_length == counter_position :
-                        print "False"
+                        
                         return  False
 
                     temp_self.parts [counter_position] = tempPosition
@@ -471,7 +470,7 @@ class Part:
 
 test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],2,0)]
 
-print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12,15],4,0)
+print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
 #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
 #(test[0].parts_list[0]).expandNode(test[0],[1,4,5,8,9,12,13,16],[12],4)
 
