@@ -16,6 +16,7 @@ class Node(object):
         self.parts_list = parts_list
         self.heurisitc_value = heurisitc_value
         self.cost = cost
+        self.enterd = False
         '''
         Constructor
         '''
