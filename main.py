@@ -5,6 +5,9 @@ Created on Oct 30, 2013
 
 @author: madkour
 '''
+def GenGrid():
+    return Grid.Grid()
+
 
 gridSize = 4
 part2 = robot.Part(1,[15])
@@ -15,7 +18,7 @@ myList = [part2,part3,part4,part5]
 
 """print part2.depthFirstSearch([1,7,15],myList,[1,4,5,8,9,12,13,16],4,0,[],["North","South","East","West"])"""
 
-g =  Grid.Grid()
+g =  GenGrid()
 #part2 = g.parts_loctions[0]
 
 
