@@ -20,8 +20,8 @@ class Grid(object):
         self.grid_size = random.randint(2,10)
         self.robot_parts = random.randint(1,self.grid_size-1)
         self.obstacle_number = random.randint(0,(self.grid_size - 2))
-        self.parts_loctions = self.assignPartsPosition(self.robot_parts,self.grid_size)
-        self.obstacles_locations = self.assignObstaclesPosition(self.obstacle_number,self.grid_size,self.parts_loctions)
+        self.parts_locations = self.assignPartsPosition(self.robot_parts,self.grid_size)
+        self.obstacles_locations = self.assignObstaclesPosition(self.obstacle_number,self.grid_size,self.parts_locations[0].parts_list)
         self.side_borders =  self.setBorders(self.grid_size)
         
         

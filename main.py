@@ -11,19 +11,23 @@ def GenGrid():
 def Search(grid, strategy, visualize):
         
     if strategy == "BFS":
-        grid.robot_parts[0].parts_list[0].bfs(grid.obstacles_locations, grid.robot_parts, grid.side_borders, grid.grid_size,0)
+        grid.parts_locations[0].parts_list[0].bfs(grid.obstacles_locations, grid.parts_locations, grid.side_borders, grid.grid_size,0)
     elif strategy == "DFS":
-        grid.robot_parts[0].parts_list[0].dfs(grid.obstacles_locations, grid.robot_parts, grid.side_borders, grid.grid_size,0)
+        grid.parts_locations[0].parts_list[0].dfs(grid.obstacles_locations, grid.parts_locations, grid.side_borders, grid.grid_size,0)
     elif strategy == "IDFS": #Iterative Deepening
-        grid.robot_parts[0].parts_list[0].ID(grid.obstacles_locations, grid.robot_parts, grid.side_borders, grid.grid_size)
+        grid.parts_locations[0].parts_list[0].ID(grid.obstacles_locations, grid.parts_locations, grid.side_borders, grid.grid_size)
     elif strategy == "A*":
-        grid.robot_parts[0].parts_list[0].astar(grid.robot_parts, grid.side_borders, grid.obstacles_locations, grid.grid_size,0)
+        grid.parts_locations[0].parts_list[0].astar(grid.parts_locations, grid.side_borders, grid.obstacles_locations, grid.grid_size,0)
     elif strategy == "Greedy":
-        grid.parts_locations[0].parts_list[0].greedy(grid.robot_parts, grid.side_borders, grid.obstacles_locations, grid.grid_size, 0)
+        grid.parts_locations[0].parts_list[0].greedy(grid.parts_locations, grid.side_borders, grid.obstacles_locations, grid.grid_size, 0)
     
     
 grid = GenGrid()
 print Search(grid,"Greedy",False)
+# print Search(grid,"BFS",False)
+# print Search(grid,"DFS",False)
+# print Search(grid,"IDFS",False)
+# print Search(grid,"A*",False)
 
 # print part2.depthFirstSearch([7],myList,[1,5,6,10,11,15,16,20,21,25],5,[],["North","South","East","West"],False)
 # print g.grid_size

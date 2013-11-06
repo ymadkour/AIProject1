@@ -508,37 +508,37 @@ def getHeuristic(listOfParts, gridSize):
         allHeuristics = allHeuristics//2
     return allHeuristics
 
-#test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1]),Part(4,[10])],2,0)]
-gridSize = 4
-part2 = Part(1,[1,2,3,4,5,6,7,8])
-# part3 = Part(2,[7])
-# part4 = Part(3,[9])
-part5 = Part(4,[15])
-myList = [part2,part5]
-
-# gridSize = 5
-# part12 = Part(1,[1])
-# part13 = Part(2,[4])
-# part14 = Part(3,[12])
-# part15 = Part(4,[14])
-# part16 = Part(5,[20])
-# part17 = Part(6,[24])
-# myList = [part12,part13,part14,part15,part16,part17]
-
-#print getHeuristic(myList,gridSize)
-
-#print getHeuristicHelper(20,24,5)
-#print isSameRow(10, 11, 4)
-
-#print getHeuristicHelper2(Part(1,[15]),myList,gridSize)
-
-#print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
-
-test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],getHeuristicHelper2(Part(1,[1]),[Part(1,[4]),Part(2,[7]),Part(3,[1])],4),0)]
-
-print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
-#Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
-#(test[0].parts_list[0]).expandNode(test[0],[1,4,5,8,9,12,13,16],[12],4)
+# #test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1]),Part(4,[10])],2,0)]
+# gridSize = 4
+# part2 = Part(1,[1,2,3,4,5,6,7,8])
+# # part3 = Part(2,[7])
+# # part4 = Part(3,[9])
+# part5 = Part(4,[15])
+# myList = [part2,part5]
+# 
+# # gridSize = 5
+# # part12 = Part(1,[1])
+# # part13 = Part(2,[4])
+# # part14 = Part(3,[12])
+# # part15 = Part(4,[14])
+# # part16 = Part(5,[20])
+# # part17 = Part(6,[24])
+# # myList = [part12,part13,part14,part15,part16,part17]
+# 
+# #print getHeuristic(myList,gridSize)
+# 
+# #print getHeuristicHelper(20,24,5)
+# #print isSameRow(10, 11, 4)
+# 
+# #print getHeuristicHelper2(Part(1,[15]),myList,gridSize)
+# 
+# #print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
+# 
+# test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],getHeuristicHelper2(Part(1,[1]),[Part(1,[4]),Part(2,[7]),Part(3,[1])],4),0)]
+# 
+# print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
+# #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
+# #(test[0].parts_list[0]).expandNode(test[0],[1,4,5,8,9,12,13,16],[12],4)
 
 
 
