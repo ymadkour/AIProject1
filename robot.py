@@ -1,7 +1,6 @@
-from Queue import *
 import copy
 import Node
-import math
+
 
 class Part:
     """docstring for part"""
@@ -198,35 +197,7 @@ class Part:
                 dif = len(parts) - length
                 length = len(parts)
                 
-                
-    """self is a node """ 
-              
-    def expandNode(self,parts,borders,obstacles,gridSize):
-        expanded_nodes = []
-        direction = ["North","South","East","West"]
-          
-        
-        for i in range(0,len(direction)):
-            temp_parts = copy.deepcopy(parts) 
-            temp_self = copy.deepcopy(self) 
-            flag = temp_self.Move(direction[i], obstacles,temp_parts.parts_list, borders, gridSize)
-            
-            if flag == False:
-                node = [Node.Node(parts.parts_list,direction[i],temp_parts.parts_list,100,100)]
-            elif flag == True and len(parts.parts_list) == len(temp_parts.parts_list):                
-                node = [Node.Node(parts.parts_list,direction[i],temp_parts.parts_list,temp_parts.heurisitc_value,1)]
-            elif flag == True and len(parts.parts_list) != len(temp_parts.parts_list):               
-                node = [Node.Node(parts.parts_list,direction[i],temp_parts.parts_list,temp_parts.heurisitc_value - 1,0)]         
-            print direction[i]    
-            print node[0].heurisitc_value
-            expanded_nodes += [flag] + node   
-        
-        return expanded_nodes
-    
-    
-    def checkGoal(self,parts_list):
-        return 1
-        
+                 
     
     
     def greedy(self,parts,borders,obstacles,gridSize,check_flag):
@@ -264,7 +235,7 @@ class Part:
                         
                         
                         if move_flag == True:
-                           node_heuristic = node.getHeuristic(_temp_parts_list.parts_list,gridSize)
+                            node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
                         else:
                             node_heuristic = 10000            
                         parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost)]
@@ -312,10 +283,11 @@ class Part:
                         
                         
                         if move_flag == True:
-                           node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
+                        
+                            node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
                         else:
                             node_heuristic = 10000            
-                        parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost+parts[min_index].cost)]
+                        parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost+parts[min_index].cost -1)]
    
                            
                        
@@ -438,12 +410,30 @@ class Part:
 
                             new_part_position += part.parts
                             new_part_position.sort()
+                            new_part = Part(self.index, new_part_position)
                             
-                            parts.parts_list.append(Part(self.index, new_part_position))
                             for p in parts.parts_list:
                                 if self._eq_(p) == True:
                                     parts.parts_list.remove(p)
                             parts.parts_list.remove(part)
+                            new_part_position1 = []
+                            for part_position in parts.parts_list:
+                                for pat in part_position.parts:
+                                    for pa in new_part_position:
+                                        
+                                        if direction == "North" or direction == "South":
+                                            if pat == pa -1 or pat == pa + 1:
+                                                new_part_position1 += [pat]
+                                                parts.parts_list.remove(part_position) 
+                                            
+                                        elif direction == "East" or direction == "West":
+                                            if pat == pa - gridSize or pat == pa + gridSize:
+                                                new_part_position1 += [pat]
+                                                parts.parts_list.remove(part_position)
+                                       
+                            
+                            new_part.parts += new_part_position1    
+                            parts.parts_list.append(new_part)
                             return True
                         
                     temp_length = len(self.parts) - 1                        
@@ -456,11 +446,11 @@ class Part:
  
  
     def _eq_ (self, other):
-         if self.index == other.index:
-             if self.parts == other.parts:
-                 return True
-         else:
-              return False   
+        if self.index == other.index:                        
+            if self.parts == other.parts:               
+                return True
+        else:          
+            return False   
          
          
 def isSameRow (part1,part2,gridSize):
@@ -509,6 +499,8 @@ def getHeuristicHelper2(part,listOfParts ,gridSize):
     return min(allHeuristics2)
         
 def getHeuristic(listOfParts, gridSize):
+    if len(listOfParts) == 1:
+        return 0 
     allHeuristics = 0
     for part in listOfParts:
         allHeuristics += getHeuristicHelper2(part,listOfParts, gridSize)
@@ -542,7 +534,7 @@ myList = [part2,part5]
 
 #print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
 
-test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],2,0)]
+test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1])],getHeuristicHelper2(Part(1,[1]),[Part(1,[4]),Part(2,[7]),Part(3,[1])],4),0)]
 
 print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
 #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
