@@ -40,7 +40,7 @@ class Grid(object):
                 temp_list.append(robot.Part(i,[temp_position]))
                 i +=1
       
-        return [Node.Node(Node.Node([],"",[],0,0),"",temp_list,robot.getHeuristic(temp_list, size),0,False)]
+        return [Node.Node(Node.Node([],"",[],0,0),"",temp_list,robot.getHeuristic(temp_list, size),0)]
     
     def assignObstaclesPosition(self,number,size, locations):
         
