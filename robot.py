@@ -40,10 +40,10 @@ class Part:
                 
             if parts[counter].enterd == False:
                 for j in parts[counter].parts_list:
-                    for i in range(0,len(direction)):           
+                    for i in range(0,len(direction)):
+                            parts[counter].enterd = True           
                             _temp_parts_list = copy.deepcopy( parts[counter])
                             move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
-                            print direction[i]
                             node = [Node.Node(parts[counter],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
                             node[0].enterd = move_flag
                             parts += node
@@ -98,10 +98,10 @@ class Part:
                 for j in parts[counter].parts_list:
                     if done_flag == True:
                         break
-                    for i in range(0,len(direction)):           
+                    for i in range(0,len(direction)):
+                            parts[counter].enterd = True           
                             _temp_parts_list = copy.deepcopy( parts[counter])
                             move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
-                            print direction[i]
                             
                             node = [Node.Node(parts[counter],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
                             node[0].enterd = move_flag
@@ -146,10 +146,9 @@ class Part:
                 for j in parts[index].parts_list:
                     
                     for i in range(0,len(direction)):
-                                       
+                            parts[index].enterd = True           
                             _temp_parts_list = copy.deepcopy( parts[index])
                             move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
-                            print direction[i]
                             parts +=[Node.Node(parts[index],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
                             if move_flag == True:
                                 self.dfIDs(obstacles, parts, borders, gridSize,len(parts)-1,my_limit,goal_limit)           
@@ -199,7 +198,6 @@ class Part:
                     elif   parts[j].enterd == True:
                         check_flag +=1
     
-            print temp_min_node.direction
             parts[min_index].enterd = True
             if  len(parts[min_index].parts_list) == 1 and parts[min_index].enterd == True:
                 return True
@@ -248,10 +246,7 @@ class Part:
                     elif   parts[j].enterd == True:
                         check_flag +=1
     
-            
-            print temp_min_node.direction
-            print "Heuristic ",temp_min_node.heurisitc_value
-            print "Cost ", temp_min_node.cost
+
             
             parts[min_index].enterd = True
             if check_flag == len(parts) or temp_min_node.heurisitc_value >= 10000:
