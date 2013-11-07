@@ -54,8 +54,7 @@ class Part:
                             parts += node
                                 
                             if(len(_temp_parts_list.parts_list) == 1):
-                                done_flag = True
-                                break
+                                return True
                             
                             check = 0
                             
@@ -68,8 +67,10 @@ class Part:
                     
         if done_flag == False and check != _temp_length * 4:
             self.bfs(obstacles, parts, borders, gridSize,_temp_length)             
-        else:
-            return parts 
+        
+        if(len(_temp_parts_list.parts_list) == 1):
+            return True
+        return False 
         
         
         
@@ -82,7 +83,7 @@ class Part:
         done_flag = False
         if(len(parts[_temp_length-1].parts_list) == 1):
 
-            return parts
+            return True
                                   
         for counter in range(index,_temp_length):
 
@@ -118,10 +119,11 @@ class Part:
                             if move_flag == True:
                                 self.dfs(obstacles, parts, borders, gridSize,len(parts)-1)    
                             if(len(parts[len(parts)-1].parts_list) == 1):
-                                done_flag = True
-                                break                           
+                                return True                           
                         
-        return parts              
+        if(len(parts[len(parts)-1].parts_list) == 1):
+            return True
+        return False              
                     
             
     def dfIDs(self, obstacles, parts, borders, gridSize,index,limit,goal_limit):
@@ -130,8 +132,10 @@ class Part:
         _temp_length = len(parts)
         my_limit = copy.deepcopy(limit)
         counter1=0
-        if(len(parts[_temp_length-1].parts_list) == 1 or limit == goal_limit):
-            return parts
+        if len(parts[_temp_length-1].parts_list) == 1 :
+            return True
+        if limit == goal_limit:
+            return False
 
         my_limit += 1
 
@@ -168,9 +172,11 @@ class Part:
                             if move_flag == True:
                                 self.dfIDs(obstacles, parts, borders, gridSize,len(parts)-1,my_limit,goal_limit)           
                             if(len(parts[len(parts)-1].parts_list) == 1):
-                                break
+                                return True
 
-        return parts     
+        if(len(parts[len(parts)-1].parts_list) == 1):
+           return True
+        return False     
      
      
     def ID (self, obstacles, parts, borders, gridSize):
@@ -219,10 +225,10 @@ class Part:
                 print px.parts
             print "%%%%%%%%%%%"
             parts[min_index].enterd = True
-            if check_flag == len(parts) or (len(parts[min_index].parts_list) == 1 and parts[min_index].enterd == True):
-                return parts
-            if temp_min_node.heurisitc_value >= 1000:
-                return parts
+            if  len(parts[min_index].parts_list) == 1 and parts[min_index].enterd == True:
+                return True
+            if check_flag == len(parts) or temp_min_node.heurisitc_value >= 1000:
+                return False
                            
 
             for node in parts[min_index].parts_list:
@@ -241,8 +247,12 @@ class Part:
                            
 
    
-        self.greedy(parts,borders,obstacles,gridSize,check_flag)             
-        return parts 
+        self.greedy(parts,borders,obstacles,gridSize,check_flag)
+        
+        for p in parts:
+            if  len(p.parts_list) == 1 and p.enterd == True:
+                return True             
+        return False 
         
         
     
@@ -272,10 +282,10 @@ class Part:
                 print px.parts
             print "%%%%%%%%%%%"
             parts[min_index].enterd = True
-            if temp_min_node.heurisitc_value >= 10000:
-                return parts
-            if check_flag == len(parts) or (len(parts[min_index].parts_list) == 1 and parts[min_index].enterd == True):
-                return parts
+            if check_flag == len(parts) or temp_min_node.heurisitc_value >= 10000:
+                return False
+            if len(parts[min_index].parts_list) == 1 and parts[min_index].enterd == True:
+                return True
                            
 
             for node in parts[min_index].parts_list:
@@ -296,7 +306,10 @@ class Part:
 
    
         self.astar(parts,borders,obstacles,gridSize,check_flag)             
-        return parts 
+        for p in parts:
+            if  len(p.parts_list) == 1 and p.enterd == True:
+                return True 
+        return False 
                
                
     def Move(self, direction, obstacles, parts, borders, gridSize):
