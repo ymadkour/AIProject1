@@ -461,7 +461,7 @@ class Part:
                             
                             new_part.parts += new_part_position1    
                             parts.parts_list.append(new_part)
-                            list(set(parts.parts_list))
+                            parts.parts_list = list(set(parts.parts_list))
                             return True
                         
                     temp_length = len(self.parts) - 1                        
