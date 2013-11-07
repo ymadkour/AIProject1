@@ -57,6 +57,29 @@ def Search(grid, strategy, visualize):
         for i in range(0,len(grid.parts_locations)):
             if grid.parts_locations[i].enterd == True:
                 no_nodes +=1
+                
+                
+   
+    
+    i = len(final_list_sequence)-2
+        
+    if final_list_sequence != []:
+        if visualize == True:
+            while i >=0:   
+                print "------------------------"
+                temp = copy.deepcopy(grid.obstacles_locations)
+                if visualize == True:
+                    print visualize(final_list_sequence[i],grid.grid_size,temp)
+                i -= 1
+                print "------------------------"
+                
+        print "Cost:"
+        print cost
+        print "number of nodes choosen for expansion during the search"
+        print no_nodes        
+    else:
+        print "no sequence was found"
+            
     
     return [final_list_sequence,[cost],[no_nodes]]    
     
@@ -94,28 +117,11 @@ def visualize(parts,gridsize,obstacles):
 #print visualize([1,2,3,4,5,6,7],6,[35,36])
         
 grid = GenGrid()
-result_list = Search(grid,"Greedy",False)
+result_list = Search(grid,"Greedy",True)
 #print Search(grid,"BFS",False)
 #print Search(grid,"DFS",False)
 #print Search(grid,"IDFS",False)
 #print Search(grid,"A*",False)
-final_list_sequence =result_list[0]
-i = len(final_list_sequence)-2
-    
-if final_list_sequence != []:
-    while i >=0:   
-            print "------------------------"
-            temp = copy.deepcopy(grid.obstacles_locations)
-            print visualize(final_list_sequence[i],grid.grid_size,temp)
-            i -= 1
-            print "------------------------"
-            
-    print "Cost:"
-    print result_list[1]
-    print "number of nodes choosen for expansion during the search"
-    print result_list[2]        
-else:
-    print "no sequence was found"
 
 
 # print part2.depthFirstSearch([7],myList,[1,5,6,10,11,15,16,20,21,25],5,[],["North","South","East","West"],False)
