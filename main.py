@@ -1,5 +1,6 @@
 import robot
 import Grid
+import copy
 '''
 Created on Oct 30, 2013
 
@@ -99,12 +100,13 @@ result_list = Search(grid,"Greedy",False)
 #print Search(grid,"IDFS",False)
 #print Search(grid,"A*",False)
 final_list_sequence =result_list[0]
-i = len(final_list_sequence)-1
+i = len(final_list_sequence)-2
     
 if final_list_sequence != []:
     while i >=0:   
             print "------------------------"
-            print visualize(final_list_sequence[i],grid.grid_size,grid.obstacles_locations)
+            temp = copy.deepcopy(grid.obstacles_locations)
+            print visualize(final_list_sequence[i],grid.grid_size,temp)
             i -= 1
             print "------------------------"
             
