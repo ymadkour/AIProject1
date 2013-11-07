@@ -43,12 +43,7 @@ class Part:
                     for i in range(0,len(direction)):           
                             _temp_parts_list = copy.deepcopy( parts[counter])
                             move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
-                            print "%%%%%%%%%%%"
                             print direction[i]
-                            print j.parts
-                            for px in _temp_parts_list.parts_list:
-                                print px.parts
-                            print "%%%%%%%%%%%"
                             node = [Node.Node(parts[counter],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
                             node[0].enterd = move_flag
                             parts += node
@@ -106,12 +101,7 @@ class Part:
                     for i in range(0,len(direction)):           
                             _temp_parts_list = copy.deepcopy( parts[counter])
                             move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
-                            print "%%%%%%%%%%%"
                             print direction[i]
-                            print j.parts
-                            for px in _temp_parts_list.parts_list:
-                                print px.parts
-                            print "%%%%%%%%%%%"
                             
                             node = [Node.Node(parts[counter],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
                             node[0].enterd = move_flag
@@ -145,9 +135,6 @@ class Part:
         else:
                 counter1 = 0    
                 for p in range(0,len(parts[index].parent.parts_list)):
-                            print len(parts)
-                            print index
-                            print p
         
                             if parts[index].parent.parts_list[p]._eq_( parts[index].parts_list[p]) == True:
                                     counter1 +=1
@@ -162,12 +149,7 @@ class Part:
                                        
                             _temp_parts_list = copy.deepcopy( parts[index])
                             move_flag = j.Move(direction[i],obstacles,_temp_parts_list,borders,gridSize)
-                            print "%%%%%%%%%%%"
                             print direction[i]
-                            print j.parts
-                            for px in _temp_parts_list.parts_list:
-                                print px.parts
-                            print "%%%%%%%%%%%"
                             parts +=[Node.Node(parts[index],direction[i],_temp_parts_list.parts_list,0,_temp_parts_list.cost)]
                             if move_flag == True:
                                 self.dfIDs(obstacles, parts, borders, gridSize,len(parts)-1,my_limit,goal_limit)           
@@ -188,8 +170,6 @@ class Part:
         while True :
             (parts[0].parts_list[0]).dfIDs(obstacles,parts,borders,gridSize,len(parts)-1,0,limit)
             parts.append(parts[0])
-            print dif
-            print len(parts)
             limit +=1;
             
             if len(parts)- length == dif or parts[len(parts)-2].parts_list == 1:
@@ -219,11 +199,7 @@ class Part:
                     elif   parts[j].enterd == True:
                         check_flag +=1
     
-            print "%%%%%%%%%%%"
             print temp_min_node.direction
-            for px in temp_min_node.parts_list:
-                print px.parts
-            print "%%%%%%%%%%%"
             parts[min_index].enterd = True
             if  len(parts[min_index].parts_list) == 1 and parts[min_index].enterd == True:
                 return True
@@ -273,14 +249,10 @@ class Part:
                         check_flag +=1
     
             
-            
-            print "%%%%%%%%%%%"
             print temp_min_node.direction
-            print temp_min_node.heurisitc_value
-            print temp_min_node.cost
-            for px in temp_min_node.parts_list:
-                print px.parts
-            print "%%%%%%%%%%%"
+            print "Heuristic ",temp_min_node.heurisitc_value
+            print "Cost ", temp_min_node.cost
+            
             parts[min_index].enterd = True
             if check_flag == len(parts) or temp_min_node.heurisitc_value >= 10000:
                 return False
@@ -548,39 +520,3 @@ def getHeuristic(listOfParts, gridSize):
     if allHeuristics > 1:
         allHeuristics = allHeuristics//2
     return allHeuristics
-
-# #test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[1]),Part(4,[10])],2,0)]
-# gridSize = 4
-# part2 = Part(1,[1,2,3,4,5,6,7,8])
-# # part3 = Part(2,[7])
-# # part4 = Part(3,[9])
-# part5 = Part(4,[15])
-# myList = [part2,part5]
-# 
-# # gridSize = 5
-# # part12 = Part(1,[1])
-# # part13 = Part(2,[4])
-# # part14 = Part(3,[12])
-# # part15 = Part(4,[14])
-# # part16 = Part(5,[20])
-# # part17 = Part(6,[24])
-# # myList = [part12,part13,part14,part15,part16,part17]
-# 
-# #print getHeuristic(myList,gridSize)
-# 
-# #print getHeuristicHelper(20,24,5)
-# #print isSameRow(10, 11, 4)
-# 
-# #print getHeuristicHelper2(Part(1,[15]),myList,gridSize)
-# 
-# #print Part(1,[1]).dfs([12,15],test,[1,4,5,8,9,12,13,16],4,0)
-# 
-#test=[Node.Node(Node.Node([],"",[],0,0),"",[Part(1,[4]),Part(2,[7]),Part(3,[2]),Part(4,[8])],getHeuristicHelper2(Part(1,[1]),[Part(1,[4]),Part(2,[7]),Part(3,[1])],4),0)]
-#Part(3,[2]).Move( "East", [12], test[0], [1,4,5,8,9,12,13,16], 4) 
-#print test
-# print Part(1,[1]).astar(test,[1,4,5,8,9,12,13,16],[12],4,0)
-# #Part(1,[1]).ID([12],test,[1,4,5,8,9,12,13,16],4)
-# #(test[0].parts_list[0]).expandNode(test[0],[1,4,5,8,9,12,13,16],[12],4)
-
-
-
