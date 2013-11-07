@@ -57,20 +57,52 @@ def Search(grid, strategy, visualize):
     if strategy == "IDFS" or  strategy == "DFS"  or strategy == "BFS" :
         no_nodes = len(grid.parts_locations)     
     
-    if strategy == "A*" or strategy = "Greedy":
+    if strategy == "A*" or strategy == "Greedy":
         for i in range(0,len(grid.parts_locations)):
             if grid.parts_locations[i].enterd == True:
                 no_nodes +=1
     
     return flag    
     
+
+def visualize(parts,gridsize,obstacles):
+    result = ""
     
-grid = GenGrid()
-#print Search(grid,"Greedy",False)
+    for i in range(1,gridsize*gridsize+1):
+        if i in parts and i % gridsize == 0:
+            result += " R  " +" \n"
+            parts.remove(i)
+        elif i in parts and not i%gridsize == 0:
+            result += " R  "
+            parts.remove(i)
+        elif i in obstacles and i % gridsize == 0:
+            result += " O  " +" \n"
+            obstacles.remove(i)
+        elif i in obstacles and not i%gridsize == 0:
+            result += " O  "
+            obstacles.remove(i)
+            
+        else:
+            if i % gridsize == 0:
+                if i < 10:
+                    result += " 0"+ str(i)+" \n"
+                else:
+                    result += " "+ str(i)+" \n"
+            elif i <10:
+                result += " 0" + str(i) + " "
+            else:
+                result += " " + str(i) + " "
+    return result
+
+
+print visualize([1,2,3,4,5,6,7],6,[35,36])
+        
+# grid = GenGrid()
+# print Search(grid,"Greedy",False)
 #print Search(grid,"BFS",False)
 #print Search(grid,"DFS",False)
 #print Search(grid,"IDFS",False)
-print Search(grid,"A*",False)
+#print Search(grid,"A*",False)
 
 # print part2.depthFirstSearch([7],myList,[1,5,6,10,11,15,16,20,21,25],5,[],["North","South","East","West"],False)
 # print g.grid_size

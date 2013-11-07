@@ -73,6 +73,5 @@ class Grid(object):
             i += grid_size
             j += grid_size
             
-        return temp_list  
-
+        return temp_list
             
