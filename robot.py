@@ -430,7 +430,10 @@ class Part:
                                             if direction == "North" or direction == "South":
                                                 if tem_pat == pa -1 or tem_pat == pa + 1:
                                                     new_part_position1 += pat.parts
-                                                    parts.parts_list.remove(pat)
+                                                    try:
+                                                        parts.parts_list.remove(pat)
+                                                    except:
+                                                        print "try and catch"
                                                     stop_flag = True
                                                     break
                                                 else:
@@ -439,7 +442,10 @@ class Part:
                                             elif direction == "East" or direction == "West":
                                                 if tem_pat == pa - gridSize or tem_pat == pa + gridSize:
                                                     new_part_position1 += pat.parts
-                                                    parts.parts_list.remove(pat)
+                                                    try:
+                                                        parts.parts_list.remove(pat)
+                                                    except:
+                                                        print "try and catch"
                                                     stop_flag = True
                                                     break
                                                 else:
