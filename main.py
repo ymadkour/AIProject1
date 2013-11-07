@@ -22,37 +22,32 @@ def Search(grid, strategy, visualize):
     elif strategy == "Greedy":
          flag = grid.parts_locations[0].parts_list[0].greedy(grid.parts_locations, grid.side_borders, grid.obstacles_locations, grid.grid_size, 0)
     
-    
-    for i in range(0,len(grid.parts_locations)):
-            if len(grid.parts_locations[i].parts_list) == 1 and grid.parts_locations[i].enterd == True:
-                cost = grid.parts_locations[i].cost
-                temp_node = grid.parts_locations[i]
-                #print cost
-                break
-    
+    cost = 0;
     final_list_sequence = []
-    final_list_direction = []
     if flag == True:
-         while temp_node != []:
-             t=[]
-             for p in temp_node.parts_list:
-                 t.append(p.parts)
-             s =[]
-             for i in t:
-                 s += i     
-             final_list_sequence += [s]
-             final_list_direction += [temp_node.direction]
-             temp_node = temp_node.parent
-    print "Diretion"
-    for i in range(0, len(final_list_sequence)):
+        for i in range(0,len(grid.parts_locations)):
+                if len(grid.parts_locations[i].parts_list) == 1 and grid.parts_locations[i].enterd == True:
+                    cost = grid.parts_locations[i].cost
+                    temp_node = grid.parts_locations[i]
+                    #print cost
+                    break
+        
+        
+        final_list_direction = []
+        if flag == True:
+             while temp_node != []:
+                 t=[]
+                 for p in temp_node.parts_list:
+                     t.append(p.parts)
+                 s =[]
+                 for i in t:
+                     s += i     
+                 final_list_sequence += [s]
+                 final_list_direction += [temp_node.direction]
+                 temp_node = temp_node.parent
 
-        
-        if i < len(final_list_direction):
-            print final_list_direction[i]
-        print final_list_sequence[i]
-        print "----------------"
-        
-                  
+    
+                
     no_nodes =0;    
     if strategy == "IDFS" or  strategy == "DFS"  or strategy == "BFS" :
         no_nodes = len(grid.parts_locations)     
@@ -62,7 +57,7 @@ def Search(grid, strategy, visualize):
             if grid.parts_locations[i].enterd == True:
                 no_nodes +=1
     
-    return flag    
+    return [final_list_sequence,[cost],[no_nodes]]    
     
 
 def visualize(parts,gridsize,obstacles):
@@ -95,14 +90,31 @@ def visualize(parts,gridsize,obstacles):
     return result
 
 
-print visualize([1,2,3,4,5,6,7],6,[35,36])
+#print visualize([1,2,3,4,5,6,7],6,[35,36])
         
-# grid = GenGrid()
-# print Search(grid,"Greedy",False)
+grid = GenGrid()
+result_list = Search(grid,"Greedy",False)
 #print Search(grid,"BFS",False)
 #print Search(grid,"DFS",False)
 #print Search(grid,"IDFS",False)
 #print Search(grid,"A*",False)
+final_list_sequence =result_list[0]
+i = len(final_list_sequence)-1
+    
+if final_list_sequence != []:
+    while i >=0:   
+            print "------------------------"
+            print visualize(final_list_sequence[i],grid.grid_size,grid.obstacles_locations)
+            i -= 1
+            print "------------------------"
+            
+    print "Cost:"
+    print result_list[1]
+    print "number of nodes choosen for expansion during the search"
+    print result_list[2]        
+else:
+    print "no sequence was found"
+
 
 # print part2.depthFirstSearch([7],myList,[1,5,6,10,11,15,16,20,21,25],5,[],["North","South","East","West"],False)
 # print g.grid_size
