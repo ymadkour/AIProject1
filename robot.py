@@ -515,3 +515,49 @@ def getHeuristic(listOfParts, gridSize):
     if allHeuristics > 1:
         allHeuristics = allHeuristics//2
     return allHeuristics
+
+def getminHeuristicHelper(part1, part2, gridSize):
+    if isSameRow(part1, part2, gridSize):
+        if part1 == part2:
+            return 0
+        return 1
+    else:
+        row1 = (part1//gridSize)+1
+        row2 = (part2//gridSize)+1
+        
+        if part1 % gridSize == 0:
+            row1 = (part1//gridSize)
+        if part2 % gridSize == 0:
+            row2 = (part2//gridSize)
+        
+        col1 = part1 - ((row1-1)*gridSize)
+        col2 = part2 - ((row2-1)*gridSize)
+ 
+        diff = abs(col1 - col2)
+        if diff == 1 or diff == 0:
+            return 1;
+        else:
+            return 2
+
+def getminHeuristicHelper2(part,listOfParts ,gridSize):
+    allHeuristics2 = []
+    for part1 in listOfParts:
+        allHeuristics3 = []
+        for part2 in part.parts:
+            #allHeuristics3 = []
+            for part3 in part1.parts:
+                heuristic3 = getminHeuristicHelper(part3, part2, gridSize)
+                allHeuristics3.append(heuristic3)
+        allHeuristics2.append(min(allHeuristics3))
+    allHeuristics2.remove(0)
+    return min(allHeuristics2)
+        
+def getminHeuristic(listOfParts, gridSize):
+    if len(listOfParts) == 1:
+        return 0 
+    allHeuristics = 0
+    for part in listOfParts:
+        allHeuristics += getminHeuristicHelper2(part,listOfParts, gridSize)
+    if allHeuristics > 1:
+        allHeuristics = allHeuristics//2
+    return allHeuristics
