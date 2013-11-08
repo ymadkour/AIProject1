@@ -181,7 +181,7 @@ class Part:
                  
     
     
-    def greedy(self,parts,borders,obstacles,gridSize,check_flag):
+    def greedy(self,parts,borders,obstacles,gridSize,check_flag,heuristic_function):
         direction = ["North","South","East","West"]
         _temp_length = len(parts)
         flag = False
@@ -213,7 +213,10 @@ class Part:
                         
                         
                         if move_flag == True:
-                            node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
+                            if heuristic_function == 0:
+                                node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
+                            else:
+                                node_heuristic = getminHeuristic(_temp_parts_list.parts_list,gridSize)
                         else:
                             node_heuristic = 10000            
                         parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost)]
@@ -221,7 +224,7 @@ class Part:
                            
 
    
-        self.greedy(parts,borders,obstacles,gridSize,check_flag)
+        self.greedy(parts,borders,obstacles,gridSize,check_flag,heuristic_function)
         
         for p in parts:
             if  len(p.parts_list) == 1 and p.enterd == True:
@@ -230,7 +233,7 @@ class Part:
         
         
     
-    def astar(self,parts,borders,obstacles,gridSize,check_flag):
+    def astar(self,parts,borders,obstacles,gridSize,check_flag,heuristic_function):
         direction = ["North","South","East","West"]
         _temp_length = len(parts)
         flag = False
@@ -263,7 +266,10 @@ class Part:
                         
                         if move_flag == True:
                         
-                            node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
+                            if heuristic_function == 0:
+                                node_heuristic = getHeuristic(_temp_parts_list.parts_list,gridSize)
+                            else:
+                                node_heuristic = getminHeuristic(_temp_parts_list.parts_list,gridSize)
                         else:
                             node_heuristic = 10000            
                         parts +=[Node.Node(parts[min_index],direction[i],_temp_parts_list.parts_list,node_heuristic,_temp_parts_list.cost+parts[min_index].cost -1)]
@@ -272,7 +278,7 @@ class Part:
                        
 
    
-        self.astar(parts,borders,obstacles,gridSize,check_flag)             
+        self.astar(parts,borders,obstacles,gridSize,check_flag,heuristic_function)             
         for p in parts:
             if  len(p.parts_list) == 1 and p.enterd == True:
                 return True 
