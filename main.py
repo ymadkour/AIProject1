@@ -70,13 +70,14 @@ def Search(grid, strategy, visualize):
    
     
     i = len(final_list_sequence)-2
-        
+    final = copy.deepcopy(final_list_sequence)   
     if final_list_sequence != []:
         if visualize == True:
             while i >=0:   
                 print "------------------------"
                 temp = copy.deepcopy(grid.obstacles_locations)
                 if visualize == True:
+                    
                     print visualization(final_list_sequence[i],grid.grid_size,temp)
                 i -= 1
                 print "------------------------"
@@ -89,7 +90,7 @@ def Search(grid, strategy, visualize):
         print "no sequence was found"
             
     
-    return [final_list_sequence,[cost],[no_nodes]]    
+    return [final,[cost],[no_nodes]]    
     
 
 def visualization(parts,gridsize,obstacles):
