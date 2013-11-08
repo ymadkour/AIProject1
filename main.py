@@ -11,8 +11,13 @@ def GenGrid():
     return Grid.Grid()
 
 def Search(grid, strategy, visualize):
-    cost = 0
     heuristic_function = random.randint(0,1)
+    if strategy == "Greedy" or strategy == "A*":
+        if heuristic_function == 0:
+            print "manhatten1"
+        else:
+            print "manhatten2"
+        
     flag = False;    
     if strategy == "BFS":
          flag = grid.parts_locations[0].parts_list[0].bfs(grid.obstacles_locations, grid.parts_locations, grid.side_borders, grid.grid_size,0,)
@@ -117,7 +122,6 @@ def visualization(parts,gridsize,obstacles):
     return result
 
 
-#print visualize([1,2,3,4,5,6,7],6,[35,36])
         
 grid = GenGrid()
 strategy=raw_input('Please enter the strategy you want to execute:("Greedy","A*","BFS","DFS","IDFS") \n')
@@ -128,13 +132,3 @@ else:
    print Search(grid,strategy,False) 
 
 
-# print part2.depthFirstSearch([7],myList,[1,5,6,10,11,15,16,20,21,25],5,[],["North","South","East","West"],False)
-# print g.grid_size
-# #print g.obstacle_number
-# #print g.robot_parts
-# #print g.parts_loctions
-# #print g.obstacles_locations
-# print g.side_borders
-# #part5.Move('East', [7,1],myList , [1,4,5,8,9,12,13,16], 4)
-# #print "##########"
-# #print len(myList[0].parts)
