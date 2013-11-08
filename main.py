@@ -1,6 +1,7 @@
-import robot
+import random
 import Grid
 import copy
+
 '''
 Created on Oct 30, 2013
 
@@ -11,31 +12,33 @@ def GenGrid():
 
 def Search(grid, strategy, visualize):
     cost = 0
+    heuristic_function = random.randint(0,1)
     flag = False;    
     if strategy == "BFS":
-         flag = grid.parts_locations[0].parts_list[0].bfs(grid.obstacles_locations, grid.parts_locations, grid.side_borders, grid.grid_size,0)
+         flag = grid.parts_locations[0].parts_list[0].bfs(grid.obstacles_locations, grid.parts_locations, grid.side_borders, grid.grid_size,0,)
     elif strategy == "DFS":
          flag = grid.parts_locations[0].parts_list[0].dfs(grid.obstacles_locations, grid.parts_locations, grid.side_borders, grid.grid_size,0)
     elif strategy == "IDFS": #Iterative Deepening
          flag = grid.parts_locations[0].parts_list[0].ID(grid.obstacles_locations, grid.parts_locations, grid.side_borders, grid.grid_size)
     elif strategy == "A*":
-         flag = grid.parts_locations[0].parts_list[0].astar(grid.parts_locations, grid.side_borders, grid.obstacles_locations, grid.grid_size,0)
+         flag = grid.parts_locations[0].parts_list[0].astar(grid.parts_locations, grid.side_borders, grid.obstacles_locations, grid.grid_size,0,heuristic_function)
     elif strategy == "Greedy":
-         flag = grid.parts_locations[0].parts_list[0].greedy(grid.parts_locations, grid.side_borders, grid.obstacles_locations, grid.grid_size, 0)
+         flag = grid.parts_locations[0].parts_list[0].greedy(grid.parts_locations, grid.side_borders, grid.obstacles_locations, grid.grid_size, 0,heuristic_function)
     
     cost = 0;
     final_list_sequence = []
-    if flag == True:
-        for i in range(0,len(grid.parts_locations)):
+    
+    for i in range(0,len(grid.parts_locations)):
                 if len(grid.parts_locations[i].parts_list) == 1 and grid.parts_locations[i].enterd == True:
                     cost = grid.parts_locations[i].cost
                     temp_node = grid.parts_locations[i]
+                    flag = True
                     #print cost
                     break
         
         
-        final_list_direction = []
-        if flag == True:
+    final_list_direction = []
+    if flag == True:
              while temp_node != []:
                  t=[]
                  for p in temp_node.parts_list:
@@ -117,11 +120,12 @@ def visualization(parts,gridsize,obstacles):
 #print visualize([1,2,3,4,5,6,7],6,[35,36])
         
 grid = GenGrid()
-result_list = Search(grid,"Greedy",True)
-#print Search(grid,"BFS",False)
-#print Search(grid,"DFS",False)
-#print Search(grid,"IDFS",False)
-#print Search(grid,"A*",False)
+strategy=raw_input('Please enter the strategy you want to execute:("Greedy","A*","BFS","DFS","IDFS") \n')
+visualize_flag=raw_input('Visual presentation of the board as it undergoes to discovered tsolution, if one was found:(F\T)"note any other input will be count as false" \n')
+if visualize_flag == 'T':
+    print Search(grid,strategy,True)
+else:
+   print Search(grid,strategy,False) 
 
 
 # print part2.depthFirstSearch([7],myList,[1,5,6,10,11,15,16,20,21,25],5,[],["North","South","East","West"],False)
